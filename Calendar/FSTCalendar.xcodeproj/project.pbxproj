@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE62C7791BAA37CC005D2D68 /* Calendar.h in Headers */ = {isa = PBXBuildFile; fileRef = AE62C7781BAA37CC005D2D68 /* Calendar.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AE62C7801BAA37CC005D2D68 /* Calendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE62C7751BAA37CC005D2D68 /* Calendar.framework */; settings = {ASSET_TAGS = (); }; };
+		AE62C7791BAA37CC005D2D68 /* FSTCalendar.h in Headers */ = {isa = PBXBuildFile; fileRef = AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AE62C7801BAA37CC005D2D68 /* FSTCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */; settings = {ASSET_TAGS = (); }; };
 		AE62C7851BAA37CC005D2D68 /* CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62C7841BAA37CC005D2D68 /* CalendarTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,10 +23,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AE62C7751BAA37CC005D2D68 /* Calendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Calendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE62C7781BAA37CC005D2D68 /* Calendar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Calendar.h; sourceTree = "<group>"; };
+		AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FSTCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTCalendar.h; sourceTree = "<group>"; };
 		AE62C77A1BAA37CC005D2D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AE62C77F1BAA37CC005D2D68 /* CalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE62C77F1BAA37CC005D2D68 /* FSTCalendar.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FSTCalendar.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE62C7841BAA37CC005D2D68 /* CalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTests.swift; sourceTree = "<group>"; };
 		AE62C7861BAA37CC005D2D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -43,7 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE62C7801BAA37CC005D2D68 /* Calendar.framework in Frameworks */,
+				AE62C7801BAA37CC005D2D68 /* FSTCalendar.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +53,7 @@
 		AE62C76B1BAA37CC005D2D68 = {
 			isa = PBXGroup;
 			children = (
-				AE62C7771BAA37CC005D2D68 /* Calendar */,
+				AE62C7771BAA37CC005D2D68 /* FSTCalendar */,
 				AE62C7831BAA37CC005D2D68 /* CalendarTests */,
 				AE62C7761BAA37CC005D2D68 /* Products */,
 			);
@@ -62,18 +62,20 @@
 		AE62C7761BAA37CC005D2D68 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AE62C7751BAA37CC005D2D68 /* Calendar.framework */,
-				AE62C77F1BAA37CC005D2D68 /* CalendarTests.xctest */,
+				AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */,
+				AE62C77F1BAA37CC005D2D68 /* FSTCalendar.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AE62C7771BAA37CC005D2D68 /* Calendar */ = {
+		AE62C7771BAA37CC005D2D68 /* FSTCalendar */ = {
 			isa = PBXGroup;
 			children = (
-				AE62C7781BAA37CC005D2D68 /* Calendar.h */,
+				AE867F221BAB34D800276A3D /* Calendar */,
+				AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */,
 				AE62C77A1BAA37CC005D2D68 /* Info.plist */,
 			);
+			name = FSTCalendar;
 			path = Calendar;
 			sourceTree = "<group>";
 		};
@@ -86,6 +88,13 @@
 			path = CalendarTests;
 			sourceTree = "<group>";
 		};
+		AE867F221BAB34D800276A3D /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Calendar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -93,16 +102,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE62C7791BAA37CC005D2D68 /* Calendar.h in Headers */,
+				AE62C7791BAA37CC005D2D68 /* FSTCalendar.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		AE62C7741BAA37CC005D2D68 /* Calendar */ = {
+		AE62C7741BAA37CC005D2D68 /* FSTCalendar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE62C7891BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "Calendar" */;
+			buildConfigurationList = AE62C7891BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "FSTCalendar" */;
 			buildPhases = (
 				AE62C7701BAA37CC005D2D68 /* Sources */,
 				AE62C7711BAA37CC005D2D68 /* Frameworks */,
@@ -113,14 +122,14 @@
 			);
 			dependencies = (
 			);
-			name = Calendar;
+			name = FSTCalendar;
 			productName = Calendar;
-			productReference = AE62C7751BAA37CC005D2D68 /* Calendar.framework */;
+			productReference = AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		AE62C77E1BAA37CC005D2D68 /* CalendarTests */ = {
+		AE62C77E1BAA37CC005D2D68 /* FSTCalendarTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE62C78C1BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "CalendarTests" */;
+			buildConfigurationList = AE62C78C1BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "FSTCalendarTests" */;
 			buildPhases = (
 				AE62C77B1BAA37CC005D2D68 /* Sources */,
 				AE62C77C1BAA37CC005D2D68 /* Frameworks */,
@@ -131,9 +140,9 @@
 			dependencies = (
 				AE62C7821BAA37CC005D2D68 /* PBXTargetDependency */,
 			);
-			name = CalendarTests;
+			name = FSTCalendarTests;
 			productName = CalendarTests;
-			productReference = AE62C77F1BAA37CC005D2D68 /* CalendarTests.xctest */;
+			productReference = AE62C77F1BAA37CC005D2D68 /* FSTCalendar.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -142,6 +151,7 @@
 		AE62C76C1BAA37CC005D2D68 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = FiveSixTwo;
 				TargetAttributes = {
@@ -153,7 +163,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AE62C76F1BAA37CC005D2D68 /* Build configuration list for PBXProject "Calendar" */;
+			buildConfigurationList = AE62C76F1BAA37CC005D2D68 /* Build configuration list for PBXProject "FSTCalendar" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -165,8 +175,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AE62C7741BAA37CC005D2D68 /* Calendar */,
-				AE62C77E1BAA37CC005D2D68 /* CalendarTests */,
+				AE62C7741BAA37CC005D2D68 /* FSTCalendar */,
+				AE62C77E1BAA37CC005D2D68 /* FSTCalendarTests */,
 			);
 		};
 /* End PBXProject section */
@@ -209,7 +219,7 @@
 /* Begin PBXTargetDependency section */
 		AE62C7821BAA37CC005D2D68 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = AE62C7741BAA37CC005D2D68 /* Calendar */;
+			target = AE62C7741BAA37CC005D2D68 /* FSTCalendar */;
 			targetProxy = AE62C7811BAA37CC005D2D68 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -252,7 +262,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -294,7 +304,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -307,31 +317,36 @@
 		AE62C78A1BAA37CC005D2D68 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Calendar/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = FST.Calendar;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FSTCalendar;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		AE62C78B1BAA37CC005D2D68 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Calendar/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = FST.Calendar;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FSTCalendar;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -342,7 +357,7 @@
 				INFOPLIST_FILE = CalendarTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = FST.CalendarTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FSTCalendar;
 			};
 			name = Debug;
 		};
@@ -352,14 +367,14 @@
 				INFOPLIST_FILE = CalendarTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = FST.CalendarTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = FSTCalendar;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AE62C76F1BAA37CC005D2D68 /* Build configuration list for PBXProject "Calendar" */ = {
+		AE62C76F1BAA37CC005D2D68 /* Build configuration list for PBXProject "FSTCalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE62C7871BAA37CC005D2D68 /* Debug */,
@@ -368,21 +383,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE62C7891BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "Calendar" */ = {
+		AE62C7891BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "FSTCalendar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE62C78A1BAA37CC005D2D68 /* Debug */,
 				AE62C78B1BAA37CC005D2D68 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
-		AE62C78C1BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "CalendarTests" */ = {
+		AE62C78C1BAA37CC005D2D68 /* Build configuration list for PBXNativeTarget "FSTCalendarTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE62C78D1BAA37CC005D2D68 /* Debug */,
 				AE62C78E1BAA37CC005D2D68 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

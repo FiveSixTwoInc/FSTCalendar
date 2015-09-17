@@ -1,5 +1,5 @@
 //
-//  Calendar.h
+//  FSTCalendar.h
 //  Calendar
 //
 //  Created by Jackson Beachwood on 9/16/15.
