@@ -35,12 +35,21 @@ public class CalendarWeekView: UIView {
         for date in self.dates {
             let dayOfWeek = DateHelpers.dayOfWeekForDate(date)
             let dayOfMonth = DateHelpers.dayOfMonthForDate(date)
-            let dayViewWidth = (Double(self.bounds.width) - (8.0 * self.dayViewSeparation)) / 7.0
+            
+            let numberOfSeparators = 8.0
+            let dayViewWidth = 50.0
+            
+            self.dayViewSeparation = (Double(self.bounds.width) - (7.0 * 65.0))/numberOfSeparators
             let x = (Double(dayOfWeek.rawValue) * self.dayViewSeparation) + (Double((dayOfWeek.rawValue - 1)) * dayViewWidth)
+            
             let dayView = CalendarDayView(frame: CGRect(x: x, y: 0, width: dayViewWidth, height: dayViewWidth))
             dayView.setupWithDay(dayOfMonth)
             self.addSubview(dayView)
             self.dayViews.append(dayView)
+            
+            if DateHelpers.isDate(NSDate(), sameDayAs: date) {
+                dayView.viewBackgroundCircle.backgroundColor = UIColor.blueColor()
+            }
         }
     }
 }
