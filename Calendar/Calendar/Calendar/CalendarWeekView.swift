@@ -15,28 +15,30 @@ public class CalendarWeekView: UIView {
     
     var dayViews = [CalendarDayView]()
     var startDate = NSDate()
+    var dates = [NSDate]()
     
-    //MARK: - Setup
-    func setup(startDate: NSDate) {
-        self.startDate = startDate
-        self.layoutDayViews()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
-    private func layoutDayViews() {
-        let weekDay = DateHelpers.dayOfWeekForDate(self.startDate).rawValue
-
-        let dayViewWidth = (Double(self.bounds.width) - (8.0 * self.dayViewSeparation)) / 7.0
-        
-        for dayView in self.dayViews {
-            dayView.removeFromSuperview()
-        }
-        
-        self.dayViews = [CalendarDayView]()
-        
-        for index in weekDay ... 7 {
-            let x = (Double(index) * self.dayViewSeparation) + (Double((index)) * dayViewWidth)
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    //MARK: - Setup
+    func setup(dates: [NSDate]) {
+        self.dates = dates
+        self.setupDayViews()
+    }
+    
+    private func setupDayViews() {
+        for date in self.dates {
+            let dayOfWeek = DateHelpers.dayOfWeekForDate(date)
+            let dayOfMonth = DateHelpers.dayOfMonthForDate(date)
+            let dayViewWidth = (Double(self.bounds.width) - (8.0 * self.dayViewSeparation)) / 7.0
+            let x = (Double(dayOfWeek.rawValue) * self.dayViewSeparation) + (Double((dayOfWeek.rawValue - 1)) * dayViewWidth)
             let dayView = CalendarDayView(frame: CGRect(x: x, y: 0, width: dayViewWidth, height: dayViewWidth))
-            dayView.setupWithDay(index + 1)
+            dayView.setupWithDay(dayOfMonth)
             self.addSubview(dayView)
             self.dayViews.append(dayView)
         }

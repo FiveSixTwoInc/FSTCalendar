@@ -28,7 +28,7 @@ class CalendarDayView: UIView {
     func initialSetup() {
         self.viewBackgroundCircle = UIView(frame: self.bounds)
         self.viewBackgroundCircle.layer.cornerRadius = self.bounds.height/2.0
-        self.viewBackgroundCircle.backgroundColor = UIColor.lightGrayColor()
+        self.viewBackgroundCircle.backgroundColor = UIColor.whiteColor()
         self.addSubview(self.viewBackgroundCircle)
         
         self.labelDayNumber = UILabel(frame: self.bounds)

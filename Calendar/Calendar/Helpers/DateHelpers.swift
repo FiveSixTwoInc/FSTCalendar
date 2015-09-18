@@ -81,4 +81,16 @@ public class DateHelpers: NSObject {
         let weekdayInt = NSCalendar.currentCalendar().component(NSCalendarUnit.Weekday, fromDate: date)
         return Weekday(rawValue: weekdayInt)!
     }
+    
+    static func dateForDayMonthYear(day: Int, month: Int, year: Int) -> NSDate? {
+        let components = NSDateComponents()
+        components.day = day
+        components.second = 0
+        components.minute = 0
+        components.hour = 1
+        components.month = month
+        components.year = year
+        return NSCalendar.currentCalendar().dateFromComponents(components)
+    }
+
 }

@@ -13,7 +13,9 @@ public class CalendarView: UIScrollView {
     var weekViews = [CalendarWeekView]()
     
     var startDate = NSDate()
+    var endDate = NSDate()
     var month = Month.January
+    var year = 1989
     
     var dayViewSeparation = 5.0
     
@@ -27,16 +29,9 @@ public class CalendarView: UIScrollView {
     //MARK: - Setup
     public func setup(month: Month) {
         self.month = month
-        let calendar = NSCalendar.currentCalendar()
-        let dateComponents = NSDateComponents()
-        dateComponents.month = month.rawValue
-        dateComponents.second = 0
-        dateComponents.hour = 1
-        dateComponents.minute = 0
-        dateComponents.day = 5
-        if let firstDate = calendar.dateFromComponents(dateComponents) {
-            self.startDate = firstDate
-        }
+        self.year = NSCalendar.currentCalendar().component(NSCalendarUnit.Year, fromDate: NSDate())
+        self.startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) ?? NSDate()
+        self.endDate = DateHelpers.dateForDayMonthYear(month.daysPerMonth, month: month.rawValue, year: year) ?? NSDate()
         self.layoutWeekViews()
     }
     
@@ -48,9 +43,42 @@ public class CalendarView: UIScrollView {
         
         self.weekViews = [CalendarWeekView]()
         
-        let weekView = CalendarWeekView()
-        weekView.setup(self.startDate)
+        let weeks = Int(ceil(Double(self.month.daysPerMonth) / 7.0))
+        
+        var startDay = 1
+        var startDate = DateHelpers.dateForDayMonthYear(startDay, month: self.month.rawValue, year: self.year)!
+        
+        var dayOfWeek = DateHelpers.dayOfWeekForDate(startDate).rawValue
+        var daysInWeek = 7 - dayOfWeek
+        
+        var endDay = startDay + daysInWeek
+
+        for index in 1 ... weeks {
+            var datesForWeek = [NSDate]()
+            
+            for dayIndex in startDay ... endDay {
+                if let date = DateHelpers.dateForDayMonthYear(dayIndex, month: month.rawValue, year: self.year) {
+                    datesForWeek.append(date)
+                }
+            }
+            self.addWeekView(index, withDates: datesForWeek)
+            
+            startDay = endDay + 1
+            startDate = DateHelpers.dateForDayMonthYear(startDay, month: self.month.rawValue, year: self.year)!
+            
+            dayOfWeek = DateHelpers.dayOfWeekForDate(startDate).rawValue
+            daysInWeek = 7 - dayOfWeek
+            
+            endDay = min(startDay + daysInWeek, self.month.daysPerMonth)
+        }
+    }
+    
+    private func addWeekView(weekNumber: Int, withDates dates: [NSDate]) {
+        let y = Double((weekNumber - 1) * 65)
+        let frame = CGRect(x: 0.0, y: y, width: Double(self.bounds.width), height: 65.0)
+        let weekView = CalendarWeekView(frame: frame)
         self.addSubview(weekView)
+        weekView.setup(dates)
         self.weekViews.append(weekView)
     }
 }
