@@ -27,24 +27,25 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         for monthView in self.loadedMonthViews {
             monthView.removeFromSuperview()
         }
+        var y: CGFloat = 0.0
         
         let previousMonthStartDate = DateHelpers.previousMonthStartDate(startDate)
         let nextMonthStartDate = DateHelpers.nextMonthStartDate(startDate)
         
         let previousMonthCalendarView = CalendarMonthView(frame: self.bounds)
-        previousMonthCalendarView.frame = self.bounds
         previousMonthCalendarView.setupWithStartDate(previousMonthStartDate)
-        
+        y += previousMonthCalendarView.bounds.height
         self.addSubview(previousMonthCalendarView)
         
         let currentMonthCalendarView = CalendarMonthView(frame: self.bounds)
-        currentMonthCalendarView.frame.origin.y = self.bounds.height
+        currentMonthCalendarView.frame.origin.y = y
         currentMonthCalendarView.setupWithStartDate(startDate)
-        
+        y += currentMonthCalendarView.bounds.height
         self.addSubview(currentMonthCalendarView)
         
         let nextMonthCalendarView = CalendarMonthView(frame: self.bounds)
-        nextMonthCalendarView.frame.origin.y = self.bounds.height * 2.0
+        nextMonthCalendarView.frame.origin.y = y
+        y += nextMonthCalendarView.bounds.height
         nextMonthCalendarView.setupWithStartDate(nextMonthStartDate)
         self.addSubview(nextMonthCalendarView)
         
@@ -52,7 +53,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         self.loadedMonthViews.append(currentMonthCalendarView)
         self.loadedMonthViews.append(nextMonthCalendarView)
     
-        self.contentSize = CGSize(width: self.bounds.width, height: self.bounds.height * 3.0)
+        self.contentSize = CGSize(width: self.bounds.width, height: y)
         self.contentOffset = CGPointMake(0.0, self.bounds.height)
     }
 
