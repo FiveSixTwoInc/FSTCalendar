@@ -18,11 +18,13 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.delegate = self
+        self.decelerationRate = UIScrollViewDecelerationRateNormal
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.delegate = self
+        self.decelerationRate = UIScrollViewDecelerationRateNormal
     }
     
     public func setup(startDate: NSDate) {
@@ -74,7 +76,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             if (visibleIndex + 1) < self.loadedMonthViews.count {
                 let nextView = self.loadedMonthViews[visibleIndex + 1]
                 
-                if contentOffset.y > (originY + 0.40 * visibleMonthView.frame.height) {
+                if contentOffset.y > (originY + 0.25 * visibleMonthView.frame.height) {
                     if self.visibleMonthView != nextView {
                         self.visibleMonthView = nextView
                         print("Set To Snap To Next Month")
@@ -86,7 +88,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             
             if (visibleIndex - 1) >= 0 {
                 let previousView = self.loadedMonthViews[visibleIndex - 1]
-                if contentOffset.y < (originY - 0.40 * visibleMonthView.frame.height) {
+                if contentOffset.y < (originY - 0.25 * visibleMonthView.frame.height) {
                     if self.visibleMonthView != previousView {
                         print("Set To Snap To Previous Month")
                         self.visibleMonthView = previousView
@@ -173,13 +175,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             monthView.removeFromSuperview()
             let offsetHeight = monthView.bounds.height
             self.loadedMonthViews.removeAtIndex(viewIndex)
-            
-            print("Removed Month View: \(monthView) at Index: \(viewIndex)")
-            print("Remaining Month Views")
-            for view in self.loadedMonthViews {
-                print("\(view)")
-            }
-            
+
             if viewIndex >= self.loadedMonthViews.count {
                 self.lockScrollChecking = false
                 return
@@ -196,12 +192,27 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     
     public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if let visibleMonthView = self.visibleMonthView {
-            self.setContentOffset(self.contentOffset, animated: true)
             self.snapToCalendarView(visibleMonthView)
         }
     }
     
+    public func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.contentOffset = self.contentOffset
+    }
+    
+    private func stopScrolling() {
+        var offset = self.contentOffset
+        offset.x -= 1.0
+        offset.y -= 1.0
+        self.contentOffset = offset
+        offset.x += 1.0
+        offset.y += 1.0
+        self.contentOffset = offset
+    }
+    
     public func snapToCalendarView(view: CalendarMonthView) {
+        print("Snapping to Month View: \(view)")
+        self.contentOffset = self.contentOffset
         self.setContentOffset(CGPointMake(0.0, view.frame.origin.y), animated: true)
     }
 }
