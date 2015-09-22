@@ -13,6 +13,8 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     var visibleMonthView: CalendarMonthView?
     private var loadedMonthViews = [CalendarMonthView]()
     
+    var lockScrollChecking = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.delegate = self
@@ -62,6 +64,9 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     
     //MARK: - UIScrollViewDelegate
     public func scrollViewDidScroll(scrollView: UIScrollView) {
+        if self.lockScrollChecking {
+            return
+        }
         if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             let contentOffset = self.contentOffset
             let originY = visibleMonthView.frame.origin.y
@@ -102,40 +107,22 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     private func loadPreviousMonth() {
         print("Loading Previous Month View")
         if let visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
+            
             let previousMonthStartDate = DateHelpers.previousMonthStartDate(visibleMonthView.startDate)
             
             let previousMonthView = CalendarMonthView(frame: self.bounds)
-            previousMonthView.frame.origin.y = visibleMonthView.frame.origin.y - visibleMonthView.frame.height
+            previousMonthView.frame.origin.y = 0
             previousMonthView.setupWithStartDate(previousMonthStartDate)
-            self.loadedMonthViews.insert(previousMonthView, atIndex: visibleMonthIndex)
-            self.addSubview(previousMonthView)
+            
+            self.insertMonthViewAndReadjustScrollView(previousMonthView, atIndex: 0)
             
             let indexToRemove = visibleMonthIndex + 3
             if (indexToRemove) < self.loadedMonthViews.count {
                 let monthViewToRemove = self.loadedMonthViews[indexToRemove]
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
-//                monthViewToRemove.removeFromSuperview()
-//                self.loadedMonthViews.removeAtIndex(indexToRemove)
             }
             
             self.adjustContentSize()
-        }
-    }
-    
-    private func removeMonthViewAndReadjustScrollView(monthView: CalendarMonthView) {
-        if let viewIndex = self.loadedMonthViews.indexOf(monthView) {
-            monthView.removeFromSuperview()
-            let offsetHeight = monthView.bounds.height
-            self.loadedMonthViews.removeAtIndex(viewIndex)
-            
-            if viewIndex >= self.loadedMonthViews.count {
-                return
-            }
-            for index in viewIndex ... self.loadedMonthViews.count - 1 {
-                let view = self.loadedMonthViews[index]
-                view.frame.origin.y -= offsetHeight
-            }
-            self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
         }
     }
     
@@ -143,12 +130,10 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         print("Loading Next Month View")
         if let visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             
-            let indexToRemove = visibleMonthIndex - 2
+            let indexToRemove = visibleMonthIndex - 3
             if (indexToRemove) >= 0 {
                 let monthViewToRemove = self.loadedMonthViews[indexToRemove]
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
-//                monthViewToRemove.removeFromSuperview()
-//                self.loadedMonthViews.removeAtIndex(indexToRemove)
             }
             
             let nextMonthStartDate = DateHelpers.nextMonthStartDate(visibleMonthView.startDate)
@@ -160,6 +145,52 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             self.addSubview(nextMonthView)
             
             self.adjustContentSize()
+        }
+    }
+    
+    private func insertMonthViewAndReadjustScrollView(monthView: CalendarMonthView, atIndex viewIndex: Int) {
+        self.lockScrollChecking = true
+        let offsetHeight = monthView.bounds.height
+        self.loadedMonthViews.insert(monthView, atIndex: viewIndex)
+        self.addSubview(monthView)
+        
+        if viewIndex >= self.loadedMonthViews.count {
+            self.lockScrollChecking = false
+            return
+        }
+        for index in viewIndex + 1 ... self.loadedMonthViews.count - 1 {
+            let view = self.loadedMonthViews[index]
+            view.frame.origin.y += offsetHeight
+        }
+        
+        self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
+        self.lockScrollChecking = false
+    }
+    
+    private func removeMonthViewAndReadjustScrollView(monthView: CalendarMonthView) {
+        self.lockScrollChecking = true
+        if let viewIndex = self.loadedMonthViews.indexOf(monthView) {
+            monthView.removeFromSuperview()
+            let offsetHeight = monthView.bounds.height
+            self.loadedMonthViews.removeAtIndex(viewIndex)
+            
+            print("Removed Month View: \(monthView) at Index: \(viewIndex)")
+            print("Remaining Month Views")
+            for view in self.loadedMonthViews {
+                print("\(view)")
+            }
+            
+            if viewIndex >= self.loadedMonthViews.count {
+                self.lockScrollChecking = false
+                return
+            }
+            for index in viewIndex ... self.loadedMonthViews.count - 1 {
+                let view = self.loadedMonthViews[index]
+                view.frame.origin.y -= offsetHeight
+            }
+            
+            self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
+            self.lockScrollChecking = false
         }
     }
     
