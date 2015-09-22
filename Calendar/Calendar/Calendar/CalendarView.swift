@@ -74,7 +74,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             if (visibleIndex + 1) < self.loadedMonthViews.count {
                 let nextView = self.loadedMonthViews[visibleIndex + 1]
                 
-                if contentOffset.y > (originY + 0.50 * visibleMonthView.frame.height) {
+                if contentOffset.y > (originY + 0.40 * visibleMonthView.frame.height) {
                     if self.visibleMonthView != nextView {
                         self.visibleMonthView = nextView
                         print("Set To Snap To Next Month")
@@ -86,7 +86,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             
             if (visibleIndex - 1) >= 0 {
                 let previousView = self.loadedMonthViews[visibleIndex - 1]
-                if contentOffset.y < (originY - 0.50 * visibleMonthView.frame.height) {
+                if contentOffset.y < (originY - 0.40 * visibleMonthView.frame.height) {
                     if self.visibleMonthView != previousView {
                         print("Set To Snap To Previous Month")
                         self.visibleMonthView = previousView
@@ -163,7 +163,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             view.frame.origin.y += offsetHeight
         }
         
-        self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
+        self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y + offsetHeight)
         self.lockScrollChecking = false
     }
     
@@ -196,6 +196,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     
     public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if let visibleMonthView = self.visibleMonthView {
+            self.setContentOffset(self.contentOffset, animated: true)
             self.snapToCalendarView(visibleMonthView)
         }
     }
