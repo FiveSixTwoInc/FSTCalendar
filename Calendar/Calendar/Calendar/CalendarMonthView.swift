@@ -18,14 +18,12 @@ public class CalendarMonthView: UIView {
     var year = 1989
     
     var dayViewSeparation = 5.0
+    var dayViewWidth = 50.0
     
     //MARK: - Setup
     public func setup(month: Month, year: Int) {
-        self.month = month
-        self.year = year
-        self.startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) ?? NSDate()
-        self.endDate = DateHelpers.dateForDayMonthYear(month.daysPerMonth, month: month.rawValue, year: year) ?? NSDate()
-        self.layoutWeekViews()
+        let startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) ?? NSDate()
+        self.setupWithStartDate(startDate)
     }
     
     public func setupWithStartDate(startDate: NSDate) {
@@ -33,9 +31,19 @@ public class CalendarMonthView: UIView {
         self.year = DateHelpers.yearForDate(startDate)
         self.startDate = startDate
         self.endDate = DateHelpers.dateForDayMonthYear(month.daysPerMonth, month: month.rawValue, year: year) ?? NSDate()
+        self.setupLayout()
         self.layoutWeekViews()
     }
     
+    public func setupLayout() {
+        let numberOfWeeks = 6.0
+        let numberOfHorizontalSeparators = 8.0
+        let numberOfVerticalSeparators = Double(DateHelpers.visibleWeeksForMonth(self.startDate)) + 1.0
+        let dayViewWidth = (Double(self.bounds.width) - (numberOfHorizontalSeparators * self.dayViewSeparation))/7.0
+        let dayViewHeight = (Double(self.bounds.height) - (numberOfVerticalSeparators * self.dayViewSeparation))/numberOfWeeks
+        self.dayViewWidth = min(dayViewWidth, dayViewHeight)
+    }
+        
     //MARK: - Helpers
     private func layoutWeekViews() {
         for weekView in self.weekViews {
@@ -78,9 +86,11 @@ public class CalendarMonthView: UIView {
     }
     
     private func addWeekView(weekNumber: Int, withDates dates: [NSDate]) {
-        let y = Double(weekNumber) * 5.0 + Double((weekNumber - 1) * 65)
-        let frame = CGRect(x: 0.0, y: y, width: Double(self.bounds.width), height: 65.0)
+        let y = Double(weekNumber) * 5.0 + (Double(weekNumber - 1) * self.dayViewWidth)
+        let frame = CGRect(x: 0.0, y: y, width: Double(self.bounds.width), height: self.dayViewWidth)
         let weekView = CalendarWeekView(frame: frame)
+        weekView.dayViewSeparation = self.dayViewSeparation
+        weekView.dayViewWidth = self.dayViewWidth
         self.addSubview(weekView)
         weekView.setup(dates)
         self.weekViews.append(weekView)

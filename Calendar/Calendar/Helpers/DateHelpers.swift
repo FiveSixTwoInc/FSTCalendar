@@ -73,8 +73,10 @@ public class DateHelpers: NSObject {
     
     static func isDate(date: NSDate, sameDayAs otherDate: NSDate) -> Bool {
         let calendar = NSCalendar.currentCalendar()
-        let dayComponent = NSCalendarUnit.Day
-        return calendar.component(dayComponent, fromDate: date) == calendar.component(dayComponent, fromDate: otherDate)
+        let unitFlags: NSCalendarUnit = [.Day, .Month, .Year]
+        let firstDateComponents = calendar.components(unitFlags, fromDate: date)
+        let secondDateComponent = calendar.components(unitFlags, fromDate: otherDate)
+        return firstDateComponents == secondDateComponent
     }
     
     static func dayOfWeekForDate(date: NSDate) -> Weekday {
@@ -132,5 +134,12 @@ public class DateHelpers: NSObject {
         }
         
         return DateHelpers.dateForDayMonthYear(1, month: nextMonth.rawValue, year: year)!
+    }
+    
+    static func visibleWeeksForMonth(date: NSDate) -> Int {
+        let dayOfWeek = DateHelpers.dayOfWeekForDate(date).rawValue
+        let offsetDaysPerMonth = DateHelpers.monthForDate(date).daysPerMonth + dayOfWeek - 2
+        let weeks = Int(ceil(Double(offsetDaysPerMonth) / 7.0))
+        return weeks
     }
 }

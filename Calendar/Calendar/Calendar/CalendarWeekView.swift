@@ -12,6 +12,7 @@ public class CalendarWeekView: UIView {
     
     //MARK: - Visual Layout
     var dayViewSeparation = 5.0
+    var dayViewWidth = 50.0
     
     var dayViews = [CalendarDayView]()
     var startDate = NSDate()
@@ -36,11 +37,7 @@ public class CalendarWeekView: UIView {
             let dayOfWeek = DateHelpers.dayOfWeekForDate(date)
             let dayOfMonth = DateHelpers.dayOfMonthForDate(date)
             
-            let numberOfSeparators = 8.0
-            let dayViewWidth = 50.0
-            
-            self.dayViewSeparation = (Double(self.bounds.width) - (7.0 * 65.0))/numberOfSeparators
-            let x = (Double(dayOfWeek.rawValue) * self.dayViewSeparation) + (Double((dayOfWeek.rawValue - 1)) * dayViewWidth)
+            let x = (Double(dayOfWeek.rawValue) * self.dayViewSeparation) + (Double((dayOfWeek.rawValue - 1)) * self.dayViewWidth)
             
             let dayView = CalendarDayView(frame: CGRect(x: x, y: 0, width: dayViewWidth, height: dayViewWidth))
             dayView.setupWithDay(dayOfMonth)
