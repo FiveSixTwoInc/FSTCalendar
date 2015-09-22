@@ -82,7 +82,7 @@ public class DateHelpers: NSObject {
         return Weekday(rawValue: weekdayInt)!
     }
     
-    static func dateForDayMonthYear(day: Int, month: Int, year: Int) -> NSDate? {
+    public static func dateForDayMonthYear(day: Int, month: Int, year: Int) -> NSDate? {
         let components = NSDateComponents()
         components.day = day
         components.second = 0
@@ -92,5 +92,45 @@ public class DateHelpers: NSObject {
         components.year = year
         return NSCalendar.currentCalendar().dateFromComponents(components)
     }
-
+    
+    public static func monthForDate(date: NSDate) -> Month {
+        let monthInt = NSCalendar.currentCalendar().component(NSCalendarUnit.Month, fromDate: date)
+        return Month(rawValue: monthInt)!
+    }
+    
+    public static func yearForDate(date: NSDate) -> Int {
+        return NSCalendar.currentCalendar().component(NSCalendarUnit.Year, fromDate: date)
+    }
+    
+    static func previousMonthStartDate(startDate: NSDate) -> NSDate {
+        let month = DateHelpers.monthForDate(startDate)
+        var year = DateHelpers.yearForDate(startDate)
+        var previousMonth = Month.January
+        
+        switch month {
+            case .January:
+                previousMonth = .December
+                year--
+            default:
+                previousMonth = Month(rawValue:month.rawValue - 1)!
+        }
+        
+        return DateHelpers.dateForDayMonthYear(1, month: previousMonth.rawValue, year: year)!
+    }
+    
+    static func nextMonthStartDate(startDate: NSDate) -> NSDate {
+        let month = DateHelpers.monthForDate(startDate)
+        var year = DateHelpers.yearForDate(startDate)
+        var nextMonth = Month.January
+        
+        switch month {
+        case .December:
+            nextMonth = .January
+            year++
+        default:
+            nextMonth = Month(rawValue:month.rawValue + 1)!
+        }
+        
+        return DateHelpers.dateForDayMonthYear(1, month: nextMonth.rawValue, year: year)!
+    }
 }

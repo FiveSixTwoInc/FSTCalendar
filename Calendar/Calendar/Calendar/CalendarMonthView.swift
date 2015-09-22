@@ -20,10 +20,18 @@ public class CalendarMonthView: UIView {
     var dayViewSeparation = 5.0
     
     //MARK: - Setup
-    public func setup(month: Month) {
+    public func setup(month: Month, year: Int) {
         self.month = month
-        self.year = NSCalendar.currentCalendar().component(NSCalendarUnit.Year, fromDate: NSDate())
+        self.year = year
         self.startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) ?? NSDate()
+        self.endDate = DateHelpers.dateForDayMonthYear(month.daysPerMonth, month: month.rawValue, year: year) ?? NSDate()
+        self.layoutWeekViews()
+    }
+    
+    public func setupWithStartDate(startDate: NSDate) {
+        self.month = DateHelpers.monthForDate(startDate)
+        self.year = DateHelpers.yearForDate(startDate)
+        self.startDate = startDate
         self.endDate = DateHelpers.dateForDayMonthYear(month.daysPerMonth, month: month.rawValue, year: year) ?? NSDate()
         self.layoutWeekViews()
     }
@@ -36,12 +44,15 @@ public class CalendarMonthView: UIView {
         
         self.weekViews = [CalendarWeekView]()
         
-        let weeks = Int(ceil(Double(self.month.daysPerMonth) / 7.0))
-        
         var startDay = 1
         var startDate = DateHelpers.dateForDayMonthYear(startDay, month: self.month.rawValue, year: self.year)!
         
         var dayOfWeek = DateHelpers.dayOfWeekForDate(startDate).rawValue
+        
+        let offsetDaysPerMonth = self.month.daysPerMonth + dayOfWeek - 2
+        
+        let weeks = Int(ceil(Double(offsetDaysPerMonth) / 7.0))
+
         var daysInWeek = 7 - dayOfWeek
         
         var endDay = startDay + daysInWeek
