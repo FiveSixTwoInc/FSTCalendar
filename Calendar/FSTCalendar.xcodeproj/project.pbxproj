@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE3E4CD51BB1DF1B001035EB /* CalendarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */; settings = {ASSET_TAGS = (); }; };
 		AE62C7791BAA37CC005D2D68 /* FSTCalendar.h in Headers */ = {isa = PBXBuildFile; fileRef = AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE62C7801BAA37CC005D2D68 /* FSTCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */; settings = {ASSET_TAGS = (); }; };
 		AE62C7851BAA37CC005D2D68 /* CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62C7841BAA37CC005D2D68 /* CalendarTests.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarTitleView.swift; path = Calendar/CalendarTitleView.swift; sourceTree = "<group>"; };
 		AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FSTCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTCalendar.h; sourceTree = "<group>"; };
 		AE62C77A1BAA37CC005D2D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				AE867F2B1BAB3A4600276A3D /* CalendarDayView.swift */,
 				AE867F311BAB753900276A3D /* CalendarWeekView.swift */,
 				AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */,
+				AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */,
 				AE867F2F1BAB643D00276A3D /* DateHelpers.swift */,
 			);
 			name = Calendar;
@@ -221,6 +224,7 @@
 				AE867F321BAB753900276A3D /* CalendarWeekView.swift in Sources */,
 				AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */,
 				AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */,
+				AE3E4CD51BB1DF1B001035EB /* CalendarTitleView.swift in Sources */,
 				AE867F261BAB38E900276A3D /* CalendarView.swift in Sources */,
 				AE867F2C1BAB3A4600276A3D /* CalendarDayView.swift in Sources */,
 			);
