@@ -22,6 +22,37 @@ public enum Month: Int {
     case November = 11
     case December = 12
     
+    var description: String {
+        get {
+            switch self {
+            case .January:
+                return "January"
+            case .February:
+                return "February"
+            case .March:
+                return "March"
+            case .April:
+                return "April"
+            case .May:
+                return "May"
+            case .June:
+                return "June"
+            case .July:
+                return "July"
+            case .August:
+                return "August"
+            case .September:
+                return "September"
+            case .October:
+                return "October"
+            case .November:
+                return "November"
+            case .December:
+                return "December"
+            }
+        }
+    }
+    
     var daysPerMonth: Int {
         get {
             switch self {

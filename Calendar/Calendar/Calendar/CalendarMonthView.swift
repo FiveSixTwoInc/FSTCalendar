@@ -36,13 +36,12 @@ public class CalendarMonthView: UIView {
     }
     
     public func setupLayout() {
-        let numberOfWeeks = Double(DateHelpers.visibleWeeksForMonth(self.startDate))
         let numberOfHorizontalSeparators = 8.0
         let numberOfVerticalSeparators = Double(DateHelpers.visibleWeeksForMonth(self.startDate)) + 1.0
         let dayViewWidth = (Double(self.bounds.width) - (numberOfHorizontalSeparators * self.dayViewSeparation))/7.0
         self.dayViewWidth = dayViewWidth
         
-        let height = numberOfVerticalSeparators * self.dayViewSeparation + (numberOfWeeks * self.dayViewWidth)
+        let height = numberOfVerticalSeparators * self.dayViewSeparation + (6 * self.dayViewWidth)
         self.frame = CGRect(x: Double(self.frame.origin.x), y: Double(self.frame.origin.y), width: Double(self.bounds.width), height: height)
     }
         
