@@ -16,6 +16,7 @@
 		AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */; settings = {ASSET_TAGS = (); }; };
 		AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2F1BAB643D00276A3D /* DateHelpers.swift */; settings = {ASSET_TAGS = (); }; };
 		AE867F321BAB753900276A3D /* CalendarWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F311BAB753900276A3D /* CalendarWeekView.swift */; settings = {ASSET_TAGS = (); }; };
+		AEB8A9421BB328520017AEB7 /* CalendarWeekdayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB8A9411BB328520017AEB7 /* CalendarWeekdayView.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +42,7 @@
 		AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarMonthView.swift; path = Calendar/CalendarMonthView.swift; sourceTree = "<group>"; };
 		AE867F2F1BAB643D00276A3D /* DateHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateHelpers.swift; path = Helpers/DateHelpers.swift; sourceTree = "<group>"; };
 		AE867F311BAB753900276A3D /* CalendarWeekView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarWeekView.swift; path = Calendar/CalendarWeekView.swift; sourceTree = "<group>"; };
+		AEB8A9411BB328520017AEB7 /* CalendarWeekdayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarWeekdayView.swift; path = Calendar/CalendarWeekdayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */,
 				AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */,
 				AE867F2F1BAB643D00276A3D /* DateHelpers.swift */,
+				AEB8A9411BB328520017AEB7 /* CalendarWeekdayView.swift */,
 			);
 			name = Calendar;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE867F321BAB753900276A3D /* CalendarWeekView.swift in Sources */,
+				AEB8A9421BB328520017AEB7 /* CalendarWeekdayView.swift in Sources */,
 				AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */,
 				AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */,
 				AE3E4CD51BB1DF1B001035EB /* CalendarTitleView.swift in Sources */,

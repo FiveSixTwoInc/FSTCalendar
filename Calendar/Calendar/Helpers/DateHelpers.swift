@@ -93,6 +93,50 @@ public enum Weekday: Int {
     case Thursday = 5
     case Friday = 6
     case Saturday = 7
+    
+    var description: String {
+        get {
+            switch self {
+            case .Sunday:
+                return "Sunday"
+            case .Monday:
+                return "Monday"
+            case .Tuesday:
+                return "Tuesday"
+            case .Wednesday:
+                return "Wednesday"
+            case .Thursday:
+                return "Thursday"
+            case .Friday:
+                return "Friday"
+            case .Saturday:
+                return "Saturday"
+            }
+        }
+    }
+    
+    var shortDescription: String {
+        get {
+            switch self {
+            case .Sunday:
+                return "SUN"
+            case .Monday:
+                return "MON"
+            case .Tuesday:
+                return "TUE"
+            case .Wednesday:
+                return "WED"
+            case .Thursday:
+                return "THU"
+            case .Friday:
+                return "FRI"
+            case .Saturday:
+                return "SAT"
+            }
+        }
+    }
+    
+    static let allDays: [Weekday] = [.Sunday, .Monday, .Tuesday, .Wednesday, .Thursday, .Friday, .Saturday]
 }
 
 public class DateHelpers: NSObject {
