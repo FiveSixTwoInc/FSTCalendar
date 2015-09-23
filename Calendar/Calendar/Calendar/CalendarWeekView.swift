@@ -8,7 +8,12 @@
 
 import UIKit
 
+@objc protocol CalendarWeekViewDelegate: class {
+    optional func calendarWeekView(weekView: CalendarWeekView, isLayingOut dayView: CalendarDayView)
+}
+
 public class CalendarWeekView: UIView {
+    weak var delegate: CalendarWeekViewDelegate?
     
     //MARK: - Visual Layout
     var dayViewHorizontalSeparation = 5.0
@@ -35,14 +40,15 @@ public class CalendarWeekView: UIView {
     private func setupDayViews() {
         for date in self.dates {
             let dayOfWeek = DateHelpers.dayOfWeekForDate(date)
-            let dayOfMonth = DateHelpers.dayOfMonthForDate(date)
             
             let x = (Double(dayOfWeek.rawValue) * self.dayViewHorizontalSeparation) + (Double((dayOfWeek.rawValue - 1)) * self.dayViewDimension)
             
             let dayView = CalendarDayView(frame: CGRect(x: x, y: 0, width: self.dayViewDimension, height: self.dayViewDimension))
-            dayView.setupWithDay(dayOfMonth)
+            dayView.setup(date)
             self.addSubview(dayView)
             self.dayViews.append(dayView)
+            
+            self.delegate?.calendarWeekView?(self, isLayingOut: dayView)
             
             if DateHelpers.isDate(NSDate(), sameDayAs: date) {
                 dayView.viewBackgroundCircle.backgroundColor = UIColor.blueColor()

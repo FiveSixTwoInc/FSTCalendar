@@ -8,14 +8,15 @@
 
 import UIKit
 
-protocol CalendarViewDelegate: class {
-    func calendarViewSelectedDayView(dayView: CalendarDayView)
+@objc public protocol CalendarViewDelegate: class {
+    func calendarView(calendarView: CalendarView, selectedDayView dayView: CalendarDayView)
+    optional func calendarView(calendarView: CalendarView, laidOutDayView dayView: CalendarDayView)
 }
 
 public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthViewDelegate {
+    public weak var calendarDelegate: CalendarViewDelegate?
     
     public var visibleMonthView: CalendarMonthView?
-    private var loadedMonthViews = [CalendarMonthView]()
     
     public var calendarTitleView: CalendarTitleView?
     
@@ -24,45 +25,43 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     public var verticalDaySeparation = 5.0
     public var horizontalDaySeparation = 5.0
     
-    //MARK: - Private Data
-    private var lockScrollChecking = false
+    //MARK: - State
+    private var loadedMonthViews = [CalendarMonthView]()
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.delegate = self
         self.clipsToBounds = true
+        self.pagingEnabled = true
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.delegate = self
         self.clipsToBounds = true
+        self.pagingEnabled = true
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
     }
     
     //MARK: - Setup
     public func setup(startDate: NSDate) {
-        for monthView in self.loadedMonthViews {
-            monthView.removeFromSuperview()
-        }
+        self.clearMonthViews()
         self.setupLayout()
-        
-        self.pagingEnabled = true
-        var y: CGFloat = 0.0
         
         let previousMonthStartDate = DateHelpers.previousMonthStartDate(startDate)
         let nextMonthStartDate = DateHelpers.nextMonthStartDate(startDate)
 
         let dates = [previousMonthStartDate, startDate, nextMonthStartDate]
         
+        var y: CGFloat = 0.0
+
         for date in dates {
             let calendarMonthView = self.monthViewWithStartDate(date)
-//            let calendarMonthView = CalendarMonthView(frame: self.bounds)
-//            calendarMonthView.delegate = self
             calendarMonthView.frame.origin.y = y
-//            calendarMonthView.dayViewVerticalSeparation = self.verticalDaySeparation
-//            calendarMonthView.dayViewHorizontalSeparation = self.horizontalDaySeparation
-//            calendarMonthView.setupWithStartDate(date)
             y += calendarMonthView.bounds.height
             self.addSubview(calendarMonthView)
             
@@ -92,6 +91,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
         self.calendarTitleView?.setup(monthView.month)
     }
     
+    //MARK: - Month Helpers
     private func monthViewWithStartDate(startDate: NSDate) -> CalendarMonthView {
         let calendarMonthView = CalendarMonthView(frame: self.bounds)
         calendarMonthView.delegate = self
@@ -99,6 +99,13 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
         calendarMonthView.dayViewHorizontalSeparation = self.horizontalDaySeparation
         calendarMonthView.setupWithStartDate(startDate)
         return calendarMonthView
+    }
+    
+    private func clearMonthViews() {
+        for monthView in self.loadedMonthViews {
+            monthView.removeFromSuperview()
+        }
+        self.loadedMonthViews = [CalendarMonthView]()
     }
     
     //MARK: - Scroll Helpers
@@ -109,7 +116,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     
     //MARK: - Month Paging Helpers
     private func loadPreviousMonth() {
-        self.lockScrollChecking = true
         if let visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             
             let previousMonthStartDate = DateHelpers.previousMonthStartDate(visibleMonthView.startDate)
@@ -124,7 +130,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
             }
         }
-        self.lockScrollChecking = false
     }
     
     private func loadNextMonth() {
@@ -146,7 +151,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     }
     
     private func insertMonthViewAndReadjustScrollView(monthView: CalendarMonthView, atIndex viewIndex: Int) {
-        self.lockScrollChecking = true
         let offsetHeight = monthView.bounds.height
         
         for index in viewIndex ... self.loadedMonthViews.count - 1 {
@@ -161,18 +165,15 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
         if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) where visibleIndex > viewIndex {
             self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y + offsetHeight)
         }
-        self.lockScrollChecking = false
     }
     
     private func removeMonthViewAndReadjustScrollView(monthView: CalendarMonthView) {
-        self.lockScrollChecking = true
         if let viewIndex = self.loadedMonthViews.indexOf(monthView) {
             monthView.removeFromSuperview()
             let offsetHeight = monthView.bounds.height
             self.loadedMonthViews.removeAtIndex(viewIndex)
             
             if viewIndex >= self.loadedMonthViews.count {
-                self.lockScrollChecking = false
                 return
             }
 
@@ -184,15 +185,11 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
             if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) where visibleIndex >= viewIndex {
                 self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
             }
-            self.lockScrollChecking = false
         }
     }
     
     //MARK: - UIScrollViewDelegate
     public func scrollViewDidScroll(scrollView: UIScrollView) {
-        if self.lockScrollChecking {
-            return
-        }
         if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             let contentOffset = self.contentOffset
             let originY = visibleMonthView.frame.origin.y
@@ -224,6 +221,11 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     
     //MARK: - CalendarMonthViewDelegate
     func calendarMonthView(monthView: CalendarMonthView, selectedDay dayView: CalendarDayView) {
-        dayView.viewBackgroundCircle.backgroundColor = dayView.isSelected ? UIColor.redColor() : UIColor.whiteColor()
+        self.calendarDelegate?.calendarView(self, selectedDayView: dayView)
+//        dayView.viewBackgroundCircle.backgroundColor = dayView.isSelected ? UIColor.redColor() : UIColor.whiteColor()
+    }
+    
+    func calendarMonthView(monthView: CalendarMonthView, laidOut dayView: CalendarDayView) {
+        self.calendarDelegate?.calendarView?(self, laidOutDayView: dayView)
     }
 }

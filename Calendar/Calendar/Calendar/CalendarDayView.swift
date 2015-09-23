@@ -8,17 +8,23 @@
 
 import UIKit
 
-protocol CalendarDayViewDelegate: class {
+public protocol CalendarDayViewDelegate: class {
     func calendarDayViewWasSelected(dayView: CalendarDayView)
 }
 
-class CalendarDayView: UIView {
+public class CalendarDayView: UIView {
     weak var delegate: CalendarDayViewDelegate?
     
     private var labelDayNumber: UILabel!
-    var viewBackgroundCircle: UIView!
+    public var viewBackgroundCircle: UIView!
     
-    var date = NSDate()
+    public var date: NSDate {
+        get {
+            return self.internalDate
+        }
+    }
+    
+    private var internalDate = NSDate()
     
     var isSelected = false
     
@@ -33,7 +39,7 @@ class CalendarDayView: UIView {
         self.initialSetup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.initialSetup()
     }
@@ -54,7 +60,7 @@ class CalendarDayView: UIView {
     
     //MARK: - Setup
     func setup(date: NSDate) {
-        self.date = date
+        self.internalDate = date
         self.labelDayNumber.text = "\(DateHelpers.dayOfMonthForDate(date))"
     }
     

@@ -8,11 +8,12 @@
 
 import UIKit
 
-protocol CalendarMonthViewDelegate: class {
+@objc protocol CalendarMonthViewDelegate: class {
     func calendarMonthView(monthView: CalendarMonthView, selectedDay dayView: CalendarDayView)
+    optional func calendarMonthView(monthView: CalendarMonthView, laidOut dayView: CalendarDayView)
 }
 
-public class CalendarMonthView: UIView, CalendarDayViewDelegate {
+public class CalendarMonthView: UIView, CalendarDayViewDelegate, CalendarWeekViewDelegate {
     private var weekDayView: CalendarWeekdayView!
     
     weak var delegate: CalendarMonthViewDelegate?
@@ -96,6 +97,7 @@ public class CalendarMonthView: UIView, CalendarDayViewDelegate {
         let weekView = CalendarWeekView(frame: frame)
         weekView.dayViewHorizontalSeparation = self.dayViewHorizontalSeparation
         weekView.dayViewDimension = self.dayViewDimension
+        weekView.delegate = self
         self.addSubview(weekView)
         weekView.setup(dates)
         weekView.dayViews.forEach{$0.delegate = self}
@@ -103,7 +105,12 @@ public class CalendarMonthView: UIView, CalendarDayViewDelegate {
     }
     
     //MARK: - CalendarDayViewDelegate
-    func calendarDayViewWasSelected(dayView: CalendarDayView) {
+    public func calendarDayViewWasSelected(dayView: CalendarDayView) {
         self.delegate?.calendarMonthView(self, selectedDay: dayView)
+    }
+    
+    //MARK: - CalendarWeekViewDelegate
+    public func calendarWeekView(weekView: CalendarWeekView, isLayingOut dayView: CalendarDayView) {
+        self.delegate?.calendarMonthView?(self, laidOut: dayView)
     }
 }

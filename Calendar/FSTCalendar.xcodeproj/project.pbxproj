@@ -110,10 +110,18 @@
 				AE867F311BAB753900276A3D /* CalendarWeekView.swift */,
 				AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */,
 				AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */,
-				AE867F2F1BAB643D00276A3D /* DateHelpers.swift */,
 				AEB8A9411BB328520017AEB7 /* CalendarWeekdayView.swift */,
+				AEB8A9431BB363AF0017AEB7 /* Helpers */,
 			);
 			name = Calendar;
+			sourceTree = "<group>";
+		};
+		AEB8A9431BB363AF0017AEB7 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				AE867F2F1BAB643D00276A3D /* DateHelpers.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
