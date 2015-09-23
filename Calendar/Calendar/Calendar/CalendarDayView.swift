@@ -27,6 +27,7 @@ class CalendarDayView: UIView {
         return gestureRecognizer
     }()
     
+    //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initialSetup()
@@ -63,6 +64,7 @@ class CalendarDayView: UIView {
     
     //MARK: - Helpers
     @objc private func didTapDayView() {
+        self.isSelected = !self.isSelected
         self.delegate?.calendarDayViewWasSelected(self)
     }
 }

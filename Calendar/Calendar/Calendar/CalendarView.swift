@@ -8,7 +8,11 @@
 
 import UIKit
 
-public class CalendarView: UIScrollView, UIScrollViewDelegate {
+protocol CalendarViewDelegate: class {
+    func calendarViewSelectedDayView(dayView: CalendarDayView)
+}
+
+public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthViewDelegate {
     
     public var visibleMonthView: CalendarMonthView?
     private var loadedMonthViews = [CalendarMonthView]()
@@ -44,11 +48,13 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         let nextMonthStartDate = DateHelpers.nextMonthStartDate(startDate)
         
         let previousMonthCalendarView = CalendarMonthView(frame: self.bounds)
+        previousMonthCalendarView.delegate = self
         previousMonthCalendarView.setupWithStartDate(previousMonthStartDate)
         y += previousMonthCalendarView.bounds.height
         self.addSubview(previousMonthCalendarView)
         
         let currentMonthCalendarView = CalendarMonthView(frame: self.bounds)
+        currentMonthCalendarView.delegate = self
         currentMonthCalendarView.frame.origin.y = y
         currentMonthCalendarView.setupWithStartDate(startDate)
         y += currentMonthCalendarView.bounds.height
@@ -57,6 +63,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         self.visibleMonthView = currentMonthCalendarView
         
         let nextMonthCalendarView = CalendarMonthView(frame: self.bounds)
+        nextMonthCalendarView.delegate = self
         nextMonthCalendarView.frame.origin.y = y
         y += nextMonthCalendarView.bounds.height
         nextMonthCalendarView.setupWithStartDate(nextMonthStartDate)
@@ -94,6 +101,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             let previousMonthStartDate = DateHelpers.previousMonthStartDate(visibleMonthView.startDate)
             
             let previousMonthView = CalendarMonthView(frame: self.bounds)
+            previousMonthView.delegate = self
             previousMonthView.setupWithStartDate(previousMonthStartDate)
             
             self.insertMonthViewAndReadjustScrollView(previousMonthView, atIndex: 0)
@@ -119,6 +127,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             let nextMonthStartDate = DateHelpers.nextMonthStartDate(visibleMonthView.startDate)
             
             let nextMonthView = CalendarMonthView(frame: self.bounds)
+            nextMonthView.delegate = self
             nextMonthView.frame.origin.y = visibleMonthView.frame.origin.y + visibleMonthView.frame.height
             nextMonthView.setupWithStartDate(nextMonthStartDate)
             self.loadedMonthViews.append(nextMonthView)
@@ -201,5 +210,10 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
                 }
             }
         }
+    }
+    
+    //MARK: - CalendarMonthViewDelegate
+    func calendarMonthView(monthView: CalendarMonthView, selectedDay dayView: CalendarDayView) {
+        dayView.viewBackgroundCircle.backgroundColor = dayView.isSelected ? UIColor.redColor() : UIColor.whiteColor()
     }
 }
