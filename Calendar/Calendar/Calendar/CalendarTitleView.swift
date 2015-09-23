@@ -9,7 +9,7 @@
 import UIKit
 
 public class CalendarTitleView: UIView {
-    @IBOutlet private weak var labelTitle: UILabel!
+    private var labelTitle: UILabel!
     
     //MARK: - Lifecycle
     override public func layoutSubviews() {

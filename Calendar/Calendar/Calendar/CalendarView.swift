@@ -10,10 +10,10 @@ import UIKit
 
 public class CalendarView: UIScrollView, UIScrollViewDelegate {
     
-    var visibleMonthView: CalendarMonthView?
+    public var visibleMonthView: CalendarMonthView?
     private var loadedMonthViews = [CalendarMonthView]()
     
-    //MARK: - Configuration
+    public var calendarTitleView: CalendarTitleView?
     
     //MARK: - Private Data
     private var lockScrollChecking = false
@@ -22,13 +22,13 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.delegate = self
-        self.decelerationRate = UIScrollViewDecelerationRateNormal
+        self.clipsToBounds = true
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.delegate = self
-        self.decelerationRate = UIScrollViewDecelerationRateNormal
+        self.clipsToBounds = true
     }
     
     //MARK: - Setup
@@ -36,6 +36,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         for monthView in self.loadedMonthViews {
             monthView.removeFromSuperview()
         }
+        
         self.pagingEnabled = true
         var y: CGFloat = 0.0
         
@@ -68,19 +69,18 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         self.contentSize = CGSize(width: self.bounds.width, height: y)
         self.contentOffset = CGPointMake(0.0, self.bounds.height)
         self.snapToCalendarView(currentMonthCalendarView)
+        
+        if let visibleMonthView = self.visibleMonthView, calendarTitleView = self.calendarTitleView {
+            calendarTitleView.setup(visibleMonthView.month)
+        }
+    }
+    
+    public func setNewVisibleMonthView(monthView: CalendarMonthView) {
+        self.visibleMonthView = monthView
+        self.calendarTitleView?.setup(monthView.month)
     }
     
     //MARK: - Scroll Helpers
-    private func stopScrolling() {
-        var offset = self.contentOffset
-        offset.x -= 1.0
-        offset.y -= 1.0
-        self.setContentOffset(offset, animated: true)
-        offset.x += 1.0
-        offset.y += 1.0
-        self.setContentOffset(offset, animated: true)
-    }
-    
     public func snapToCalendarView(view: CalendarMonthView) {
         print("Snapping to Month View: \(view)")
         self.setContentOffset(CGPointMake(0.0, view.frame.origin.y), animated: true)
@@ -183,7 +183,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
                 
                 if contentOffset.y > (originY + 0.50 * visibleMonthView.frame.height) {
                     if self.visibleMonthView != nextView {
-                        self.visibleMonthView = nextView
+                        self.setNewVisibleMonthView(nextView)
                         self.loadNextMonth()
                     }
                     return
@@ -194,7 +194,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
                 let previousView = self.loadedMonthViews[visibleIndex - 1]
                 if contentOffset.y < (originY - (0.50 * visibleMonthView.frame.height)) {
                     if self.visibleMonthView != previousView {
-                        self.visibleMonthView = previousView
+                        self.setNewVisibleMonthView(previousView)
                         self.loadPreviousMonth()
                     }
                     return

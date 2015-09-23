@@ -63,6 +63,6 @@ class CalendarDayView: UIView {
     
     //MARK: - Helpers
     @objc private func didTapDayView() {
-        
+        self.delegate?.calendarDayViewWasSelected(self)
     }
 }
