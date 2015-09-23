@@ -15,6 +15,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     
     var lockScrollChecking = false
     
+    //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.delegate = self
@@ -27,6 +28,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         self.decelerationRate = UIScrollViewDecelerationRateNormal
     }
     
+    //MARK: - Setup
     public func setup(startDate: NSDate) {
         for monthView in self.loadedMonthViews {
             monthView.removeFromSuperview()
@@ -77,19 +79,12 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     
     public func snapToCalendarView(view: CalendarMonthView) {
         print("Snapping to Month View: \(view)")
-        self.contentOffset = self.contentOffset
         self.setContentOffset(CGPointMake(0.0, view.frame.origin.y), animated: true)
     }
-    
-//    private func adjustContentSize() {
-//        let lastMonth = self.loadedMonthViews[self.loadedMonthViews.count - 1]
-//        self.contentSize = CGSize(width: self.bounds.width, height: lastMonth.frame.origin.y + lastMonth.frame.height)
-//    }
     
     //MARK: - Month Paging Helpers
     private func loadPreviousMonth() {
         self.lockScrollChecking = true
-        print("Loading Previous Month View")
         if let visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             
             let previousMonthStartDate = DateHelpers.previousMonthStartDate(visibleMonthView.startDate)
@@ -99,7 +94,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             
             self.insertMonthViewAndReadjustScrollView(previousMonthView, atIndex: 0)
             
-            let indexToRemove = visibleMonthIndex + 2
+            let indexToRemove = visibleMonthIndex + 3
             if (indexToRemove) < self.loadedMonthViews.count {
                 let monthViewToRemove = self.loadedMonthViews[indexToRemove]
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
@@ -109,7 +104,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
     }
     
     private func loadNextMonth() {
-        print("Loading Next Month View")
         if let visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             
             let indexToRemove = visibleMonthIndex - 2
@@ -153,13 +147,18 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             monthView.removeFromSuperview()
             let offsetHeight = monthView.bounds.height
             self.loadedMonthViews.removeAtIndex(viewIndex)
+            
+            if viewIndex >= self.loadedMonthViews.count {
+                self.lockScrollChecking = false
+                return
+            }
 
             for index in viewIndex ... self.loadedMonthViews.count - 1 {
                 let view = self.loadedMonthViews[index]
                 view.frame.origin.y -= offsetHeight
             }
             
-            if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) where visibleIndex > viewIndex {
+            if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) where visibleIndex >= viewIndex {
                 self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
             }
             self.lockScrollChecking = false
@@ -206,9 +205,10 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         }
     }
     
-//    public func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-//        self.stopScrolling()
-//        self.snapToCalendarView(self.visibleMonthView!)
-//    }
-
+    public func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        self.stopScrolling()
+        if let visibleMonthView = self.visibleMonthView {
+            self.snapToCalendarView(visibleMonthView)
+        }
+    }
 }
