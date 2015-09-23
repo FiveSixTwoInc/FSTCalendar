@@ -11,8 +11,8 @@ import UIKit
 public class CalendarWeekView: UIView {
     
     //MARK: - Visual Layout
-    var dayViewSeparation = 5.0
-    var dayViewWidth = 50.0
+    var dayViewHorizontalSeparation = 5.0
+    var dayViewDimension = 50.0
     
     var dayViews = [CalendarDayView]()
     var startDate = NSDate()
@@ -37,9 +37,9 @@ public class CalendarWeekView: UIView {
             let dayOfWeek = DateHelpers.dayOfWeekForDate(date)
             let dayOfMonth = DateHelpers.dayOfMonthForDate(date)
             
-            let x = (Double(dayOfWeek.rawValue) * self.dayViewSeparation) + (Double((dayOfWeek.rawValue - 1)) * self.dayViewWidth)
+            let x = (Double(dayOfWeek.rawValue) * self.dayViewHorizontalSeparation) + (Double((dayOfWeek.rawValue - 1)) * self.dayViewDimension)
             
-            let dayView = CalendarDayView(frame: CGRect(x: x, y: 0, width: dayViewWidth, height: dayViewWidth))
+            let dayView = CalendarDayView(frame: CGRect(x: x, y: 0, width: self.dayViewDimension, height: self.dayViewDimension))
             dayView.setupWithDay(dayOfMonth)
             self.addSubview(dayView)
             self.dayViews.append(dayView)

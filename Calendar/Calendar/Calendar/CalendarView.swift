@@ -19,6 +19,11 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     
     public var calendarTitleView: CalendarTitleView?
     
+    //MARK: - Configuration
+    public var dayViewDimension = 50.0
+    public var verticalDaySeparation = 5.0
+    public var horizontalDaySeparation = 5.0
+    
     //MARK: - Private Data
     private var lockScrollChecking = false
     
@@ -40,51 +45,60 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
         for monthView in self.loadedMonthViews {
             monthView.removeFromSuperview()
         }
+        self.setupLayout()
         
         self.pagingEnabled = true
         var y: CGFloat = 0.0
         
         let previousMonthStartDate = DateHelpers.previousMonthStartDate(startDate)
         let nextMonthStartDate = DateHelpers.nextMonthStartDate(startDate)
+
+        let dates = [previousMonthStartDate, startDate, nextMonthStartDate]
         
-        let previousMonthCalendarView = CalendarMonthView(frame: self.bounds)
-        previousMonthCalendarView.delegate = self
-        previousMonthCalendarView.setupWithStartDate(previousMonthStartDate)
-        y += previousMonthCalendarView.bounds.height
-        self.addSubview(previousMonthCalendarView)
+        for date in dates {
+            let calendarMonthView = self.monthViewWithStartDate(date)
+//            let calendarMonthView = CalendarMonthView(frame: self.bounds)
+//            calendarMonthView.delegate = self
+            calendarMonthView.frame.origin.y = y
+//            calendarMonthView.dayViewVerticalSeparation = self.verticalDaySeparation
+//            calendarMonthView.dayViewHorizontalSeparation = self.horizontalDaySeparation
+//            calendarMonthView.setupWithStartDate(date)
+            y += calendarMonthView.bounds.height
+            self.addSubview(calendarMonthView)
+            
+            self.loadedMonthViews.append(calendarMonthView)
+            if (date == startDate) {
+                self.visibleMonthView = calendarMonthView
+            }
+        }
         
-        let currentMonthCalendarView = CalendarMonthView(frame: self.bounds)
-        currentMonthCalendarView.delegate = self
-        currentMonthCalendarView.frame.origin.y = y
-        currentMonthCalendarView.setupWithStartDate(startDate)
-        y += currentMonthCalendarView.bounds.height
-        self.addSubview(currentMonthCalendarView)
-        
-        self.visibleMonthView = currentMonthCalendarView
-        
-        let nextMonthCalendarView = CalendarMonthView(frame: self.bounds)
-        nextMonthCalendarView.delegate = self
-        nextMonthCalendarView.frame.origin.y = y
-        y += nextMonthCalendarView.bounds.height
-        nextMonthCalendarView.setupWithStartDate(nextMonthStartDate)
-        self.addSubview(nextMonthCalendarView)
-        
-        self.loadedMonthViews.append(previousMonthCalendarView)
-        self.loadedMonthViews.append(currentMonthCalendarView)
-        self.loadedMonthViews.append(nextMonthCalendarView)
-    
         self.contentSize = CGSize(width: self.bounds.width, height: y)
         self.contentOffset = CGPointMake(0.0, self.bounds.height)
-        self.snapToCalendarView(currentMonthCalendarView)
+
+        self.snapToCalendarView(self.visibleMonthView!)
         
         if let visibleMonthView = self.visibleMonthView, calendarTitleView = self.calendarTitleView {
             calendarTitleView.setup(visibleMonthView.month)
         }
     }
     
+    private func setupLayout() {
+        self.verticalDaySeparation = (Double(self.bounds.height) - (7.0 * self.dayViewDimension))/7.0
+        self.horizontalDaySeparation = (Double(self.bounds.width) - (7.0 * self.dayViewDimension))/8.0
+    }
+    
     public func setNewVisibleMonthView(monthView: CalendarMonthView) {
         self.visibleMonthView = monthView
         self.calendarTitleView?.setup(monthView.month)
+    }
+    
+    private func monthViewWithStartDate(startDate: NSDate) -> CalendarMonthView {
+        let calendarMonthView = CalendarMonthView(frame: self.bounds)
+        calendarMonthView.delegate = self
+        calendarMonthView.dayViewVerticalSeparation = self.verticalDaySeparation
+        calendarMonthView.dayViewHorizontalSeparation = self.horizontalDaySeparation
+        calendarMonthView.setupWithStartDate(startDate)
+        return calendarMonthView
     }
     
     //MARK: - Scroll Helpers
@@ -100,9 +114,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
             
             let previousMonthStartDate = DateHelpers.previousMonthStartDate(visibleMonthView.startDate)
             
-            let previousMonthView = CalendarMonthView(frame: self.bounds)
-            previousMonthView.delegate = self
-            previousMonthView.setupWithStartDate(previousMonthStartDate)
+            let previousMonthView = self.monthViewWithStartDate(previousMonthStartDate)
             
             self.insertMonthViewAndReadjustScrollView(previousMonthView, atIndex: 0)
             
@@ -126,10 +138,8 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
             
             let nextMonthStartDate = DateHelpers.nextMonthStartDate(visibleMonthView.startDate)
             
-            let nextMonthView = CalendarMonthView(frame: self.bounds)
-            nextMonthView.delegate = self
+            let nextMonthView = self.monthViewWithStartDate(nextMonthStartDate)
             nextMonthView.frame.origin.y = visibleMonthView.frame.origin.y + visibleMonthView.frame.height
-            nextMonthView.setupWithStartDate(nextMonthStartDate)
             self.loadedMonthViews.append(nextMonthView)
             self.addSubview(nextMonthView)
         }
