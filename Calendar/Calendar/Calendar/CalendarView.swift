@@ -179,10 +179,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
                 
                 if contentOffset.y > (originY + 0.35 * visibleMonthView.frame.height) {
                     if self.visibleMonthView != nextView {
-                        print("Set To Snap To Next Month - Visible Month: \(visibleMonthView) - Current Offset: \(scrollView.contentOffset)")
                         self.visibleMonthView = nextView
-                        self.loadedMonthViews.forEach{$0.backgroundColor = UIColor.clearColor()}
-                        nextView.backgroundColor = UIColor.yellowColor()
                         self.loadNextMonth()
                     }
                     return
@@ -193,10 +190,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
                 let previousView = self.loadedMonthViews[visibleIndex - 1]
                 if contentOffset.y < (originY - (0.65 * visibleMonthView.frame.height)) {
                     if self.visibleMonthView != previousView {
-                        print("Set To Snap To Previous Month - Visible Month: \(visibleMonthView) - Current Offset: \(scrollView.contentOffset)")
                         self.visibleMonthView = previousView
-                        self.loadedMonthViews.forEach{$0.backgroundColor = UIColor.clearColor()}
-                        previousView.backgroundColor = UIColor.yellowColor()
                         self.loadPreviousMonth()
                     }
                     return
