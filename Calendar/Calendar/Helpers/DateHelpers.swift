@@ -146,7 +146,7 @@ public class DateHelpers: NSObject {
         return calendar.component(components, fromDate: date)
     }
     
-    static func isDate(date: NSDate, sameDayAs otherDate: NSDate) -> Bool {
+    static public func isDate(date: NSDate, sameDayAs otherDate: NSDate) -> Bool {
         let calendar = NSCalendar.currentCalendar()
         let unitFlags: NSCalendarUnit = [.Day, .Month, .Year]
         let firstDateComponents = calendar.components(unitFlags, fromDate: date)

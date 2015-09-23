@@ -19,6 +19,7 @@ public class CalendarWeekView: UIView {
     var dayViewHorizontalSeparation = 5.0
     var dayViewDimension = 50.0
     
+    //MARK: - State
     var dayViews = [CalendarDayView]()
     var startDate = NSDate()
     var dates = [NSDate]()
@@ -49,10 +50,6 @@ public class CalendarWeekView: UIView {
             self.dayViews.append(dayView)
             
             self.delegate?.calendarWeekView?(self, isLayingOut: dayView)
-            
-            if DateHelpers.isDate(NSDate(), sameDayAs: date) {
-                dayView.viewBackgroundCircle.backgroundColor = UIColor.blueColor()
-            }
         }
     }
 }

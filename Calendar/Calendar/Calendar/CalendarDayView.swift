@@ -15,9 +15,16 @@ public protocol CalendarDayViewDelegate: class {
 public class CalendarDayView: UIView {
     weak var delegate: CalendarDayViewDelegate?
     
+    //MARK: - UI
     private var labelDayNumber: UILabel!
     public var viewBackgroundCircle: UIView!
     
+    lazy var gestureRecognizerSelect: UITapGestureRecognizer = {
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "didTapDayView")
+        return gestureRecognizer
+    }()
+    
+    //MARK: - State
     public var date: NSDate {
         get {
             return self.internalDate
@@ -27,11 +34,6 @@ public class CalendarDayView: UIView {
     private var internalDate = NSDate()
     
     var isSelected = false
-    
-    lazy var gestureRecognizerSelect: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "didTapDayView")
-        return gestureRecognizer
-    }()
     
     //MARK: - Lifecycle
     override init(frame: CGRect) {
