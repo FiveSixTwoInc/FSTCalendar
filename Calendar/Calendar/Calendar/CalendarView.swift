@@ -81,11 +81,11 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         self.setContentOffset(CGPointMake(0.0, view.frame.origin.y), animated: true)
     }
     
-    private func adjustContentSize() {
-        let lastMonth = self.loadedMonthViews[self.loadedMonthViews.count - 1]
-        self.contentSize = CGSize(width: self.bounds.width, height: lastMonth.frame.origin.y + lastMonth.frame.height)
-
-    }    
+//    private func adjustContentSize() {
+//        let lastMonth = self.loadedMonthViews[self.loadedMonthViews.count - 1]
+//        self.contentSize = CGSize(width: self.bounds.width, height: lastMonth.frame.origin.y + lastMonth.frame.height)
+//    }
+    
     //MARK: - Month Paging Helpers
     private func loadPreviousMonth() {
         self.lockScrollChecking = true
@@ -104,8 +104,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
                 let monthViewToRemove = self.loadedMonthViews[indexToRemove]
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
             }
-            
-            self.adjustContentSize()
         }
         self.lockScrollChecking = false
     }
@@ -127,8 +125,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
             nextMonthView.setupWithStartDate(nextMonthStartDate)
             self.loadedMonthViews.append(nextMonthView)
             self.addSubview(nextMonthView)
-            
-            self.adjustContentSize()
         }
     }
     
@@ -145,7 +141,7 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate {
         self.loadedMonthViews.insert(monthView, atIndex: viewIndex)
         self.addSubview(monthView)
         
-        if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) where visibleIndex < viewIndex {
+        if let visibleMonthView = self.visibleMonthView, visibleIndex = self.loadedMonthViews.indexOf(visibleMonthView) where visibleIndex > viewIndex {
             self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y + offsetHeight)
         }
         self.lockScrollChecking = false
