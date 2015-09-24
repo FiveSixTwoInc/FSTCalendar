@@ -9,7 +9,7 @@
 import UIKit
 
 public class CalendarTitleView: UIView {
-    private var labelTitle: UILabel!
+    public var labelTitle: UILabel!
     
     //MARK: - Lifecycle
     override public func layoutSubviews() {
@@ -20,12 +20,14 @@ public class CalendarTitleView: UIView {
     }
     
     //MARK: - Setup
-    public func setup(month: Month) {
+    public func setup(date: NSDate) {
         if self.labelTitle == nil {
             self.labelTitle = UILabel(frame: self.bounds)
             self.labelTitle.textAlignment = NSTextAlignment.Center
+            self.labelTitle.font = UIFont.boldSystemFontOfSize(16.0)
             self.addSubview(self.labelTitle)
         }
-        self.labelTitle.text = month.description
+        let month = DateHelpers.monthForDate(date)
+        self.labelTitle.text = "\(month.description) \(DateHelpers.yearForDate(date))"
     }
 }

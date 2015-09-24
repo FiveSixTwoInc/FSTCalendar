@@ -93,7 +93,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         self.snapToCalendarView(self.visibleMonthView!)
         
         if let visibleMonthView = self.visibleMonthView, calendarTitleView = self.calendarTitleView {
-            calendarTitleView.setup(visibleMonthView.month)
+            calendarTitleView.setup(visibleMonthView.startDate)
         }
     }
     
@@ -113,7 +113,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     
     private func setNewVisibleMonthView(monthView: CalendarMonthView) {
         self.p_visibleMonthView = monthView
-        self.calendarTitleView?.setup(monthView.month)
+        self.calendarTitleView?.setup(monthView.startDate)
     }
     
     //MARK: - Month Helpers
@@ -150,7 +150,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
             self.insertMonthViewAndReadjustScrollView(previousMonthView, atIndex: 0)
             
             let indexToRemove = visibleMonthIndex + 3
-            if (indexToRemove) < self.loadedMonthViews.count {
+            if self.loadedMonthViews.count >= 3 && (indexToRemove) < self.loadedMonthViews.count {
                 let monthViewToRemove = self.loadedMonthViews[indexToRemove]
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
             }
@@ -161,7 +161,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         if let visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.loadedMonthViews.indexOf(visibleMonthView) {
             
             let indexToRemove = visibleMonthIndex - 2
-            if (indexToRemove) >= 0 {
+            if self.loadedMonthViews.count >= 3 && (indexToRemove) >= 0 {
                 let monthViewToRemove = self.loadedMonthViews[indexToRemove]
                 self.removeMonthViewAndReadjustScrollView(monthViewToRemove)
             }

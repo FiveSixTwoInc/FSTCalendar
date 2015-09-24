@@ -31,6 +31,7 @@ class CalendarWeekdayView: UIView {
             let label = UILabel(frame: labelFrame)
             label.text = day.shortDescription
             label.enabled = false
+            label.font = UIFont.systemFontOfSize(14.0)
             label.textAlignment = NSTextAlignment.Center
             self.labelsWeekdays.append(label)
             self.addSubview(label)

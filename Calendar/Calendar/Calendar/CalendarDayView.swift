@@ -55,7 +55,7 @@ public class CalendarDayView: UIView {
         
         self.labelDayNumber = UILabel(frame: self.bounds)
         self.labelDayNumber.textAlignment = NSTextAlignment.Center
-        self.labelDayNumber.font = UIFont.systemFontOfSize(14.0)
+        self.labelDayNumber.font = UIFont.systemFontOfSize(16.0)
         self.addSubview(self.labelDayNumber)
         self.addGestureRecognizer(self.gestureRecognizerSelect)
     }
