@@ -57,6 +57,13 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         self.defaultSetup()
     }
     
+    //MARK: - Public
+    public func reloadData() {
+        if let visibleMonthView = self.visibleMonthView {
+            self.setup(visibleMonthView.startDate)
+        }
+    }
+    
     //MARK: - Setup
     public func setup(month: Month, year: Int) {
         let startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year)!
