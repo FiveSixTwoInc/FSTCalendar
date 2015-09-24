@@ -19,6 +19,17 @@ public class CalendarDayView: UIView {
     private var labelDayNumber: UILabel!
     public var viewBackgroundCircle: UIView!
     
+    public var textColor: UIColor? {
+        get {
+            return self.labelDayNumber?.textColor
+        }
+        set (color) {
+            if let labelDayNumber = self.labelDayNumber {
+                labelDayNumber.textColor = color
+            }
+        }
+    }
+    
     lazy var gestureRecognizerSelect: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: "didTapDayView")
         return gestureRecognizer
