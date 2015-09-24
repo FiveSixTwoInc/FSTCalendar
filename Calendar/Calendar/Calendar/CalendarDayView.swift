@@ -16,7 +16,6 @@ public class CalendarDayView: UIView {
     weak var delegate: CalendarDayViewDelegate?
     
     //MARK: - UI
-    private var labelDayNumber: UILabel!
     public var viewBackgroundCircle: UIView!
     
     public var textColor: UIColor? {
@@ -29,6 +28,8 @@ public class CalendarDayView: UIView {
             }
         }
     }
+    
+    private var labelDayNumber: UILabel!
     
     lazy var gestureRecognizerSelect: UITapGestureRecognizer = {
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: "didTapDayView")
