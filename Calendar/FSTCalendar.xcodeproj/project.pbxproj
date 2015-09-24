@@ -11,7 +11,7 @@
 		AE62C7791BAA37CC005D2D68 /* FSTCalendar.h in Headers */ = {isa = PBXBuildFile; fileRef = AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE62C7801BAA37CC005D2D68 /* FSTCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */; settings = {ASSET_TAGS = (); }; };
 		AE62C7851BAA37CC005D2D68 /* CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62C7841BAA37CC005D2D68 /* CalendarTests.swift */; };
-		AE867F261BAB38E900276A3D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F251BAB38E900276A3D /* CalendarView.swift */; settings = {ASSET_TAGS = (); }; };
+		AE867F261BAB38E900276A3D /* CalendarVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F251BAB38E900276A3D /* CalendarVerticalView.swift */; settings = {ASSET_TAGS = (); }; };
 		AE867F2C1BAB3A4600276A3D /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2B1BAB3A4600276A3D /* CalendarDayView.swift */; settings = {ASSET_TAGS = (); }; };
 		AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */; settings = {ASSET_TAGS = (); }; };
 		AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2F1BAB643D00276A3D /* DateHelpers.swift */; settings = {ASSET_TAGS = (); }; };
@@ -37,7 +37,7 @@
 		AE62C77F1BAA37CC005D2D68 /* FSTCalendar.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FSTCalendar.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE62C7841BAA37CC005D2D68 /* CalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTests.swift; sourceTree = "<group>"; };
 		AE62C7861BAA37CC005D2D68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		AE867F251BAB38E900276A3D /* CalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarView.swift; path = Calendar/CalendarView.swift; sourceTree = "<group>"; };
+		AE867F251BAB38E900276A3D /* CalendarVerticalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarVerticalView.swift; path = Calendar/CalendarVerticalView.swift; sourceTree = "<group>"; };
 		AE867F2B1BAB3A4600276A3D /* CalendarDayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarDayView.swift; path = Calendar/CalendarDayView.swift; sourceTree = "<group>"; };
 		AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CalendarMonthView.swift; path = Calendar/CalendarMonthView.swift; sourceTree = "<group>"; };
 		AE867F2F1BAB643D00276A3D /* DateHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DateHelpers.swift; path = Helpers/DateHelpers.swift; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 		AE867F221BAB34D800276A3D /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
-				AE867F251BAB38E900276A3D /* CalendarView.swift */,
+				AE867F251BAB38E900276A3D /* CalendarVerticalView.swift */,
 				AE867F2B1BAB3A4600276A3D /* CalendarDayView.swift */,
 				AE867F311BAB753900276A3D /* CalendarWeekView.swift */,
 				AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */,
@@ -237,7 +237,7 @@
 				AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */,
 				AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */,
 				AE3E4CD51BB1DF1B001035EB /* CalendarTitleView.swift in Sources */,
-				AE867F261BAB38E900276A3D /* CalendarView.swift in Sources */,
+				AE867F261BAB38E900276A3D /* CalendarVerticalView.swift in Sources */,
 				AE867F2C1BAB3A4600276A3D /* CalendarDayView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

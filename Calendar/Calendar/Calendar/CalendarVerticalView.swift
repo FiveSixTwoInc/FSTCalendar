@@ -9,14 +9,24 @@
 import UIKit
 
 @objc public protocol CalendarViewDelegate: class {
-    func calendarView(calendarView: CalendarView, selectedDayView dayView: CalendarDayView)
-    optional func calendarView(calendarView: CalendarView, laidOutDayView dayView: CalendarDayView)
+    func calendarView(calendarView: CalendarVerticalView, selectedDayView dayView: CalendarDayView)
+    optional func calendarView(calendarView: CalendarVerticalView, laidOutDayView dayView: CalendarDayView)
 }
 
-public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthViewDelegate {
-    public weak var calendarDelegate: CalendarViewDelegate?
+public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarMonthViewDelegate {
+    public weak var calendarDelegate: CalendarViewDelegate? {
+        get {
+            return self.p_calendarDelegate
+        }
+        set(delegate) {
+            self.p_calendarDelegate = delegate
+            if let visibleMonthView = self.visibleMonthView {
+                self.setup(visibleMonthView.startDate)
+            }
+        }
+    }
     
-    public var visibleMonthView: CalendarMonthView?
+    private weak var p_calendarDelegate: CalendarViewDelegate?
     
     public var calendarTitleView: CalendarTitleView?
     
@@ -28,34 +38,40 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     //MARK: - State
     private var loadedMonthViews = [CalendarMonthView]()
     
+    public var visibleMonthView: CalendarMonthView? {
+        get {
+            return self.p_visibleMonthView
+        }
+    }
+    
+    private var p_visibleMonthView: CalendarMonthView?
+    
     //MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.delegate = self
-        self.clipsToBounds = true
-        self.pagingEnabled = true
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
+        self.defaultSetup()
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.delegate = self
-        self.clipsToBounds = true
-        self.pagingEnabled = true
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
+        self.defaultSetup()
     }
     
     //MARK: - Setup
+    public func setup(month: Month, year: Int) {
+        let startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year)!
+        self.setup(startDate)
+    }
+    
     public func setup(startDate: NSDate) {
         self.clearMonthViews()
         self.setupLayout()
         
+        let monthStartDate = DateHelpers.dateForDayMonthYear(1, month: DateHelpers.monthForDate(startDate).rawValue, year: DateHelpers.yearForDate(startDate))!
         let previousMonthStartDate = DateHelpers.previousMonthStartDate(startDate)
         let nextMonthStartDate = DateHelpers.nextMonthStartDate(startDate)
 
-        let dates = [previousMonthStartDate, startDate, nextMonthStartDate]
+        let dates = [previousMonthStartDate, monthStartDate, nextMonthStartDate]
         
         var y: CGFloat = 0.0
 
@@ -66,8 +82,8 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
             self.addSubview(calendarMonthView)
             
             self.loadedMonthViews.append(calendarMonthView)
-            if (date == startDate) {
-                self.visibleMonthView = calendarMonthView
+            if (date == monthStartDate) {
+                self.p_visibleMonthView = calendarMonthView
             }
         }
         
@@ -81,13 +97,22 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
         }
     }
     
+    private func defaultSetup() {
+        self.delegate = self
+        self.clipsToBounds = true
+        self.pagingEnabled = true
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
+        self.setup(NSDate())
+    }
+    
     private func setupLayout() {
         self.verticalDaySeparation = (Double(self.bounds.height) - (7.0 * self.dayViewDimension))/7.0
         self.horizontalDaySeparation = (Double(self.bounds.width) - (7.0 * self.dayViewDimension))/8.0
     }
     
-    public func setNewVisibleMonthView(monthView: CalendarMonthView) {
-        self.visibleMonthView = monthView
+    private func setNewVisibleMonthView(monthView: CalendarMonthView) {
+        self.p_visibleMonthView = monthView
         self.calendarTitleView?.setup(monthView.month)
     }
     
@@ -222,7 +247,6 @@ public class CalendarView: UIScrollView, UIScrollViewDelegate, CalendarMonthView
     //MARK: - CalendarMonthViewDelegate
     func calendarMonthView(monthView: CalendarMonthView, selectedDay dayView: CalendarDayView) {
         self.calendarDelegate?.calendarView(self, selectedDayView: dayView)
-//        dayView.viewBackgroundCircle.backgroundColor = dayView.isSelected ? UIColor.redColor() : UIColor.whiteColor()
     }
     
     func calendarMonthView(monthView: CalendarMonthView, laidOut dayView: CalendarDayView) {
