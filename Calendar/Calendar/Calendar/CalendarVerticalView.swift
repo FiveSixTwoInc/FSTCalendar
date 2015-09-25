@@ -188,7 +188,6 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     
     //MARK: - Scroll Helpers
     public func snapToCalendarView(view: CalendarMonthView) {
-        print("Snapping to Month View: \(view)")
         self.setContentOffset(CGPointMake(0.0, view.frame.origin.y), animated: true)
     }
     
