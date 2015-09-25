@@ -40,6 +40,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     public var verticalDaySeparation = 5.0
     public var horizontalDaySeparation = 5.0
     
+    private var monthYearScrollTarget: (targetMonthYear: MonthYear, isScrollingUp: Bool)?
+    
     //MARK: - State
     private var monthViews = [CalendarMonthView]()
     
@@ -165,6 +167,29 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     }
     
     //MARK: - Month Helpers
+    public func scrollToMonth(month: Month, year: Int) {
+        if let visibleMonthView = self.visibleMonthView, visibleIndex = self.monthViews.indexOf(visibleMonthView), newMonthStartDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) {
+            switch newMonthStartDate.compare(visibleMonthView.startDate) {
+                case NSComparisonResult.OrderedAscending:
+                    //Scroll Up
+                    self.monthYearScrollTarget = ((month, year), true)
+                    let previousMonth = self.monthViews[visibleIndex - 1]
+                    self.setNewVisibleMonthView(previousMonth)
+                    self.snapToCalendarView(previousMonth)
+                    break
+                case NSComparisonResult.OrderedDescending:
+                    //Scroll down
+                    self.monthYearScrollTarget = ((month, year), false)
+                    let nextMonth = self.monthViews[visibleIndex + 1]
+                    self.setNewVisibleMonthView(nextMonth)
+                    self.snapToCalendarView(nextMonth)
+                    break
+                case NSComparisonResult.OrderedSame:
+                    break
+            }
+        }
+    }
+    
     private func setNewVisibleMonthView(monthView: CalendarMonthView) {
         self.p_visibleMonthView = monthView
         self.calendarTitleView?.setup(monthView.startDate)
@@ -328,6 +353,28 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
                     }
                 }
             return
+            }
+        }
+    }
+    
+    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+        if let monthYearScrollTarget = self.monthYearScrollTarget, visibleMonthView = self.visibleMonthView, visibleMonthIndex = self.monthViews.indexOf(visibleMonthView) {
+            if visibleMonthView.month == monthYearScrollTarget.targetMonthYear.month && visibleMonthView.year == monthYearScrollTarget.targetMonthYear.year {
+                self.monthYearScrollTarget = nil
+            }
+            else {
+                if monthYearScrollTarget.isScrollingUp {
+                    let previousMonth = self.monthViews[visibleMonthIndex - 1]
+                    self.setNewVisibleMonthView(previousMonth)
+                    self.loadPreviousMonth()
+                    self.snapToCalendarView(previousMonth)
+                }
+                else {
+                    let nextMonth = self.monthViews[visibleMonthIndex + 1]
+                    self.setNewVisibleMonthView(nextMonth)
+                    self.loadNextMonth()
+                    self.snapToCalendarView(nextMonth)
+                }
             }
         }
     }
