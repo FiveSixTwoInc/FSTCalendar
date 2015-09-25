@@ -1,5 +1,5 @@
 //
-//  CalendarView.swift
+//  CalendarVerticalView.swift
 //  FSTCalendar
 //
 //  Created by Jackson Beachwood on 9/17/15.
@@ -7,6 +7,8 @@
 //
 
 import UIKit
+
+public typealias MonthYear = (month: Month, year: Int)
 
 @objc public protocol CalendarViewDelegate: class {
     func calendarView(calendarView: CalendarVerticalView, selectedDayView dayView: CalendarDayView)
@@ -31,6 +33,9 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     public var calendarTitleView: CalendarTitleView?
     
     //MARK: - Configuration
+    public var upperMonthYearLimit: MonthYear?
+    public var lowerMonthYearLimit: MonthYear?
+    
     public var dayViewDimension = 50.0
     public var verticalDaySeparation = 5.0
     public var horizontalDaySeparation = 5.0
@@ -108,8 +113,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         self.delegate = self
         self.clipsToBounds = true
         self.pagingEnabled = true
-        self.showsHorizontalScrollIndicator = false
-        self.showsVerticalScrollIndicator = false
+//        self.showsHorizontalScrollIndicator = false
+//        self.showsVerticalScrollIndicator = false
         self.setup(NSDate())
     }
     
@@ -222,31 +227,58 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     
     //MARK: - UIScrollViewDelegate
     public func scrollViewDidScroll(scrollView: UIScrollView) {
-        if let visibleMonthView = self.visibleMonthView, visibleIndex = self.monthViews.indexOf(visibleMonthView) {
+        if let visibleMonthView = self.visibleMonthView, visibleIndex = self.monthViews.indexOf(visibleMonthView){
             let contentOffset = self.contentOffset
             let originY = visibleMonthView.frame.origin.y
             
-            if (visibleIndex + 1) < self.monthViews.count {
+            if contentOffset.y > (originY + 0.50 * visibleMonthView.frame.height) && (visibleIndex + 1) < self.monthViews.count {
                 let nextView = self.monthViews[visibleIndex + 1]
-                
-                if contentOffset.y > (originY + 0.50 * visibleMonthView.frame.height) {
-                    if self.visibleMonthView != nextView {
-                        self.setNewVisibleMonthView(nextView)
+
+                if self.visibleMonthView != nextView {
+                    var shouldLoadNext = true
+                    
+                    if let upperMonthYearLimit = self.upperMonthYearLimit, upperLimitDate = DateHelpers.dateForDayMonthYear(1, month: upperMonthYearLimit.month.rawValue, year: upperMonthYearLimit.year) {
+                        let followingMonthStart = DateHelpers.nextMonthStartDate(nextView.startDate)
+                        switch followingMonthStart.compare(upperLimitDate) {
+                            case .OrderedDescending:
+                                shouldLoadNext = false
+                            default:
+                                break;
+                        }
+                    }
+
+                    self.setNewVisibleMonthView(nextView)
+                    if shouldLoadNext && visibleIndex != 0 && visibleIndex != self.monthViews.count - 1 {
                         self.loadNextMonth()
                     }
-                    return
                 }
+                return
             }
             
-            if (visibleIndex - 1) >= 0 {
+            if contentOffset.y < (originY - (0.50 * visibleMonthView.frame.height)) && (visibleIndex - 1) >= 0{
                 let previousView = self.monthViews[visibleIndex - 1]
-                if contentOffset.y < (originY - (0.50 * visibleMonthView.frame.height)) {
-                    if self.visibleMonthView != previousView {
-                        self.setNewVisibleMonthView(previousView)
+
+                if self.visibleMonthView != previousView {
+                    var shouldLoadPrevious = true
+                    
+                    if let lowerMonthYearLimit = self.lowerMonthYearLimit, lowerLimitDate = DateHelpers.dateForDayMonthYear(1, month: lowerMonthYearLimit.month.rawValue, year: lowerMonthYearLimit.year) {
+                        let previousMonthStart = DateHelpers.previousMonthStartDate(previousView.startDate)
+                        switch previousMonthStart.compare(lowerLimitDate) {
+                            case .OrderedAscending:
+                                shouldLoadPrevious = false
+                            default:
+                                break;
+                        }
+                    }
+                    
+                    self.setNewVisibleMonthView(previousView)
+                    
+                    if shouldLoadPrevious && visibleIndex != 0 && visibleIndex != self.monthViews.count - 1 {
+                        //We should only load new pages when the visible page isnt on the edge of our loaded pages. Otherwise, we get stuck loading pages 3 indices away from our current position
                         self.loadPreviousMonth()
                     }
-                    return
                 }
+            return
             }
         }
     }
