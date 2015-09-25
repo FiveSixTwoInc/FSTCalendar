@@ -63,27 +63,59 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     }
     
     //MARK: - Public
+    
+    /**
+    Notifies the delegate that all dayViews for currently loaded months are being laid out.
+    */
     public func reloadData() {
         for monthView in self.monthViews {
             monthView.reloadData()
         }
     }
     
-    //MARK: - Setup
+    /**
+    Setup the CalendarView with the specified Month + Year initially displayed.
+    */
     public func setup(month: Month, year: Int) {
         let startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year)!
         self.setup(startDate)
     }
     
-    public func setUpperRange(month: Month, year: Int) {
-        self.upperMonthYearLimit = (month, year)
+    /**
+    Sets the latest Month page that will be displayed. Setting the Upper Limit lower than the Lower Limit will remove the Lower Limit.
+    */
+    public func setUpperRange(month: Month?, year: Int?) {
+        if let month = month, year = year {
+            self.upperMonthYearLimit = (month, year)
+            if let lowerMonthYearLimit = self.lowerMonthYearLimit, lowerDate = DateHelpers.dateForDayMonthYear(1, month: lowerMonthYearLimit.month.rawValue, year: lowerMonthYearLimit.year), upperDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) {
+                if upperDate.compare(lowerDate) == NSComparisonResult.OrderedAscending {
+                    self.lowerMonthYearLimit = nil
+                }
+            }
+        }
+        else {
+            self.upperMonthYearLimit = nil
+        }
+    }
+
+    /**
+    Sets the earlier Month page that will be displayed. Setting the Lower Limit higher than the Upper Limit will remove the Upper Limit.
+    */
+    public func setLowerRange(month: Month?, year: Int?) {
+        if let month = month, year = year {
+            self.lowerMonthYearLimit = (month, year)
+            if let upperMonthYearLimit = self.upperMonthYearLimit, upperDate = DateHelpers.dateForDayMonthYear(1, month: upperMonthYearLimit.month.rawValue, year: upperMonthYearLimit.year), lowerDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) {
+                if lowerDate.compare(upperDate) == NSComparisonResult.OrderedDescending {
+                    self.upperMonthYearLimit = nil
+                }
+            }
+        }
+        else {
+            self.lowerMonthYearLimit = nil
+        }
     }
     
-    public func setLowerRange(month: Month, year: Int) {
-        self.lowerMonthYearLimit = (month, year)
-    }
-    
-    public func setup(startDate: NSDate) {
+    private func setup(startDate: NSDate) {
         self.clearMonthViews()
         self.setupLayout()
         
@@ -117,6 +149,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         }
     }
     
+    //MARK: - Setup
     private func defaultSetup() {
         self.delegate = self
         self.clipsToBounds = true
