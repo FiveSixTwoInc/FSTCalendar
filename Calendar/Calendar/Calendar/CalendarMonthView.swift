@@ -20,37 +20,67 @@ public class CalendarMonthView: UIView, CalendarDayViewDelegate, CalendarWeekVie
     
     var weekViews = [CalendarWeekView]()
     
-    var startDate = NSDate()
-    var endDate = NSDate()
-    var month = Month.January
-    var year = 1989
+    public var startDate: NSDate {
+        get {
+            return self.p_startDate
+        }
+        set (date) {
+            self.p_startDate = date
+            self.p_month = DateHelpers.monthForDate(date)
+            self.p_year = DateHelpers.yearForDate(date)
+        }
+    }
+    private var p_startDate = NSDate()
+
+    public var endDate: NSDate {
+        get {
+            return self.p_endDate
+        }
+        set (date) {
+            self.p_endDate = date
+        }
+    }
+    private var p_endDate = NSDate()
+    
+    public var month: Month {
+        get {
+            return self.p_month
+        }
+    }
+    private var p_month = Month.January
+    
+    public var year: Int {
+        get {
+            return self.p_year
+        }
+    }
+    private var p_year = 1989
     
     var dayViewHorizontalSeparation = 5.0
     var dayViewVerticalSeparation = 5.0
     var dayViewDimension = 50.0
     
-    //MARK: - Setup
-    public func setup(month: Month, year: Int) {
-        let startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year) ?? NSDate()
-        self.setupWithStartDate(startDate)
-    }
-    
+    //MARK: - Public
     public func setupWithStartDate(startDate: NSDate) {
         self.setupWeekdayView()
-        self.month = DateHelpers.monthForDate(startDate)
-        self.year = DateHelpers.yearForDate(startDate)
         self.startDate = startDate
         self.endDate = DateHelpers.dateForDayMonthYear(month.daysPerMonth, month: month.rawValue, year: year) ?? NSDate()
         self.layoutWeekViews()
     }
     
+    public func reloadData() {
+        for weekView in self.weekViews {
+            weekView.reloadData()
+        }
+    }
+    
+    //MARK: - Helpers
     private func setupWeekdayView() {
         let weekdayFrame = CGRect(x: 0.0, y: 0.0, width: Double(self.bounds.width), height: 50.0)
         let weekdayView = CalendarWeekdayView(frame: weekdayFrame)
         self.addSubview(weekdayView)
     }
     
-    //MARK: - Helpers
     private func layoutWeekViews() {
         for weekView in self.weekViews {
             weekView.removeFromSuperview()

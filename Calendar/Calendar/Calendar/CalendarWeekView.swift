@@ -32,12 +32,19 @@ public class CalendarWeekView: UIView {
         super.init(coder: aDecoder)
     }
     
-    //MARK: - Setup
-    func setup(dates: [NSDate]) {
+    //MARK: - Public
+    public func reloadData() {
+        for dayView in self.dayViews {
+            self.delegate?.calendarWeekView?(self, isLayingOut: dayView)
+        }
+    }
+    
+    public func setup(dates: [NSDate]) {
         self.dates = dates
         self.setupDayViews()
     }
     
+    //MARK: - Helpers
     private func setupDayViews() {
         for date in self.dates {
             let dayOfWeek = DateHelpers.dayOfWeekForDate(date)

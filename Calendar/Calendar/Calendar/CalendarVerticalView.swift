@@ -8,7 +8,7 @@
 
 import UIKit
 
-public typealias MonthYear = (month: Month, year: Int)
+private typealias MonthYear = (month: Month, year: Int)
 
 @objc public protocol CalendarViewDelegate: class {
     func calendarView(calendarView: CalendarVerticalView, selectedDayView dayView: CalendarDayView)
@@ -33,8 +33,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     public var calendarTitleView: CalendarTitleView?
     
     //MARK: - Configuration
-    public var upperMonthYearLimit: MonthYear?
-    public var lowerMonthYearLimit: MonthYear?
+    private var upperMonthYearLimit: MonthYear?
+    private var lowerMonthYearLimit: MonthYear?
     
     public var dayViewDimension = 50.0
     public var verticalDaySeparation = 5.0
@@ -64,8 +64,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     
     //MARK: - Public
     public func reloadData() {
-        if let visibleMonthView = self.visibleMonthView {
-            self.setup(visibleMonthView.startDate)
+        for monthView in self.monthViews {
+            monthView.reloadData()
         }
     }
     
@@ -73,6 +73,14 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     public func setup(month: Month, year: Int) {
         let startDate = DateHelpers.dateForDayMonthYear(1, month: month.rawValue, year: year)!
         self.setup(startDate)
+    }
+    
+    public func setUpperRange(month: Month, year: Int) {
+        self.upperMonthYearLimit = (month, year)
+    }
+    
+    public func setLowerRange(month: Month, year: Int) {
+        self.lowerMonthYearLimit = (month, year)
     }
     
     public func setup(startDate: NSDate) {
@@ -113,8 +121,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         self.delegate = self
         self.clipsToBounds = true
         self.pagingEnabled = true
-//        self.showsHorizontalScrollIndicator = false
-//        self.showsVerticalScrollIndicator = false
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
         self.setup(NSDate())
     }
     
@@ -123,12 +131,12 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         self.horizontalDaySeparation = (Double(self.bounds.width) - (7.0 * self.dayViewDimension))/8.0
     }
     
+    //MARK: - Month Helpers
     private func setNewVisibleMonthView(monthView: CalendarMonthView) {
         self.p_visibleMonthView = monthView
         self.calendarTitleView?.setup(monthView.startDate)
     }
     
-    //MARK: - Month Helpers
     private func monthViewWithStartDate(startDate: NSDate) -> CalendarMonthView {
         let calendarMonthView = CalendarMonthView(frame: self.bounds)
         calendarMonthView.delegate = self
@@ -191,6 +199,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         let offsetHeight = monthView.bounds.height
         
         for index in viewIndex ... self.monthViews.count - 1 {
+            //Adjust all monthViews below the new monthView downward
             let view = self.monthViews[index]
             view.frame.origin.y += offsetHeight
         }
@@ -200,6 +209,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         self.addSubview(monthView)
         
         if let visibleMonthView = self.visibleMonthView, visibleIndex = self.monthViews.indexOf(visibleMonthView) where visibleIndex > viewIndex {
+            //Adjust the contentOffset so the users viewpoint remains stationary
             self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y + offsetHeight)
         }
     }
@@ -211,15 +221,18 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
             self.monthViews.removeAtIndex(viewIndex)
             
             if viewIndex >= self.monthViews.count {
+                //If we removed the bottom-most month we don't need to adjust anything
                 return
             }
 
             for index in viewIndex ... self.monthViews.count - 1 {
+                //Adjust the frames for all remaining month views upwards so they fill the remaining content area
                 let view = self.monthViews[index]
                 view.frame.origin.y -= offsetHeight
             }
             
             if let visibleMonthView = self.visibleMonthView, visibleIndex = self.monthViews.indexOf(visibleMonthView) where visibleIndex >= viewIndex {
+                //Adjust the contentOffset so the users viewpoint remains stationary
                 self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentOffset.y - offsetHeight)
             }
         }
@@ -238,6 +251,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
                     var shouldLoadNext = true
                     
                     if let upperMonthYearLimit = self.upperMonthYearLimit, upperLimitDate = DateHelpers.dateForDayMonthYear(1, month: upperMonthYearLimit.month.rawValue, year: upperMonthYearLimit.year) {
+                        //Check to see if the first day of the month for the month we would be potentially loading is within our range of months to load
                         let followingMonthStart = DateHelpers.nextMonthStartDate(nextView.startDate)
                         switch followingMonthStart.compare(upperLimitDate) {
                             case .OrderedDescending:
@@ -248,7 +262,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
                     }
 
                     self.setNewVisibleMonthView(nextView)
-                    if shouldLoadNext && visibleIndex != 0 && visibleIndex != self.monthViews.count - 1 {
+                    if shouldLoadNext && visibleIndex + 1 == self.monthViews.count - 1 {
+                        //We should only load new pages when we haven't hit our lower limit and when we are scrolling into the MonthView currently on the edge
                         self.loadNextMonth()
                     }
                 }
@@ -262,6 +277,7 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
                     var shouldLoadPrevious = true
                     
                     if let lowerMonthYearLimit = self.lowerMonthYearLimit, lowerLimitDate = DateHelpers.dateForDayMonthYear(1, month: lowerMonthYearLimit.month.rawValue, year: lowerMonthYearLimit.year) {
+                        //Check to see if the first day of the month for the month we would be potentially loading is within our range of months to load
                         let previousMonthStart = DateHelpers.previousMonthStartDate(previousView.startDate)
                         switch previousMonthStart.compare(lowerLimitDate) {
                             case .OrderedAscending:
@@ -273,8 +289,8 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
                     
                     self.setNewVisibleMonthView(previousView)
                     
-                    if shouldLoadPrevious && visibleIndex != 0 && visibleIndex != self.monthViews.count - 1 {
-                        //We should only load new pages when the visible page isnt on the edge of our loaded pages. Otherwise, we get stuck loading pages 3 indices away from our current position
+                    if shouldLoadPrevious && visibleIndex - 1 == 0 {
+                        //We should only load new pages when we haven't hit our lower limit and when we are scrolling into the MonthView currently on the edge
                         self.loadPreviousMonth()
                     }
                 }
