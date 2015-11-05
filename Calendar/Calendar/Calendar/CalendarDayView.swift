@@ -29,6 +29,19 @@ public class CalendarDayView: UIView {
         }
     }
     
+    public var isDayEnabled: Bool {
+        get {
+            return self.internalIsDayEnabled
+        }
+        set (value) {
+            self.internalIsDayEnabled = value
+            self.userInteractionEnabled = value
+            self.labelDayNumber.enabled = value
+        }
+    }
+    
+    private var internalIsDayEnabled = true
+    
     private var labelDayNumber: UILabel!
     
     lazy var gestureRecognizerSelect: UITapGestureRecognizer = {

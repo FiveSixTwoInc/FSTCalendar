@@ -154,6 +154,38 @@ public class DateHelpers: NSObject {
         return firstDateComponents == secondDateComponent
     }
     
+    static public func isDate(date: NSDate, beforeDayOfDate otherDate: NSDate) -> Bool {
+        let calendar = NSCalendar.currentCalendar()
+        let unitFlags: NSCalendarUnit = [.Day, .Month, .Year]
+        let firstDateComponents = calendar.components(unitFlags, fromDate: date)
+        let secondDateComponent = calendar.components(unitFlags, fromDate: otherDate)
+        
+        if firstDateComponents.year < secondDateComponent.year {
+            return true
+        }
+        
+        if firstDateComponents.year > secondDateComponent.year {
+            return false
+        }
+        
+        //Same Year
+        if firstDateComponents.month < secondDateComponent.month {
+            return true
+        }
+        
+        if firstDateComponents.month > secondDateComponent.month {
+            return false
+        }
+        
+        //Same Month
+        if firstDateComponents.day < secondDateComponent.day {
+            return true
+        }
+        
+        //If same month, same year and day is same or greater
+        return false
+    }
+    
     static func dayOfWeekForDate(date: NSDate) -> Weekday {
         let weekdayInt = NSCalendar.currentCalendar().component(NSCalendarUnit.Weekday, fromDate: date)
         return Weekday(rawValue: weekdayInt)!
