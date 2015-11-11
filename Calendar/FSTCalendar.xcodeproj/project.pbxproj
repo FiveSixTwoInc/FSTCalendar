@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE3E4CD51BB1DF1B001035EB /* CalendarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */; settings = {ASSET_TAGS = (); }; };
+		AE3E4CD51BB1DF1B001035EB /* CalendarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3E4CD41BB1DF1B001035EB /* CalendarTitleView.swift */; };
 		AE62C7791BAA37CC005D2D68 /* FSTCalendar.h in Headers */ = {isa = PBXBuildFile; fileRef = AE62C7781BAA37CC005D2D68 /* FSTCalendar.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AE62C7801BAA37CC005D2D68 /* FSTCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */; settings = {ASSET_TAGS = (); }; };
+		AE62C7801BAA37CC005D2D68 /* FSTCalendar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE62C7751BAA37CC005D2D68 /* FSTCalendar.framework */; };
 		AE62C7851BAA37CC005D2D68 /* CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE62C7841BAA37CC005D2D68 /* CalendarTests.swift */; };
-		AE867F261BAB38E900276A3D /* CalendarVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F251BAB38E900276A3D /* CalendarVerticalView.swift */; settings = {ASSET_TAGS = (); }; };
-		AE867F2C1BAB3A4600276A3D /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2B1BAB3A4600276A3D /* CalendarDayView.swift */; settings = {ASSET_TAGS = (); }; };
-		AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */; settings = {ASSET_TAGS = (); }; };
-		AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2F1BAB643D00276A3D /* DateHelpers.swift */; settings = {ASSET_TAGS = (); }; };
-		AE867F321BAB753900276A3D /* CalendarWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F311BAB753900276A3D /* CalendarWeekView.swift */; settings = {ASSET_TAGS = (); }; };
-		AEB8A9421BB328520017AEB7 /* CalendarWeekdayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB8A9411BB328520017AEB7 /* CalendarWeekdayView.swift */; settings = {ASSET_TAGS = (); }; };
+		AE867F261BAB38E900276A3D /* CalendarVerticalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F251BAB38E900276A3D /* CalendarVerticalView.swift */; };
+		AE867F2C1BAB3A4600276A3D /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2B1BAB3A4600276A3D /* CalendarDayView.swift */; };
+		AE867F2E1BAB3A5700276A3D /* CalendarMonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2D1BAB3A5700276A3D /* CalendarMonthView.swift */; };
+		AE867F301BAB643D00276A3D /* DateHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F2F1BAB643D00276A3D /* DateHelpers.swift */; };
+		AE867F321BAB753900276A3D /* CalendarWeekView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE867F311BAB753900276A3D /* CalendarWeekView.swift */; };
+		AEB8A9421BB328520017AEB7 /* CalendarWeekdayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB8A9411BB328520017AEB7 /* CalendarWeekdayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -360,7 +360,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Calendar/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = FST.Calendar;
 				PRODUCT_NAME = FSTCalendar;
@@ -379,7 +379,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Calendar/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = FST.Calendar;
 				PRODUCT_NAME = FSTCalendar;
