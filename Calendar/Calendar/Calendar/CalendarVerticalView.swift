@@ -15,7 +15,7 @@ private typealias MonthYear = (month: Month, year: Int)
     optional func calendarView(calendarView: CalendarVerticalView, laidOutDayView dayView: CalendarDayView)
 }
 
-public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarMonthViewDelegate {
+public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarMonthViewDelegate, CalendarTitleViewDelegate {
     public weak var calendarDelegate: CalendarViewDelegate? {
         get {
             return self.p_calendarDelegate
@@ -227,6 +227,26 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
         }
     }
     
+    private func scrollToNextMonth() {
+        if let visibleMonth = self.visibleMonthView, indexOfMonth = self.monthViews.indexOf(visibleMonth) {
+            if indexOfMonth + 1 <= self.monthViews.count - 1 {
+                let nextMonth = self.monthViews[indexOfMonth + 1]
+                self.snapToCalendarView(nextMonth)
+            }
+            
+        }
+    }
+    
+    private func scrollToPreviousMonth() {
+        if let visibleMonth = self.visibleMonthView, indexOfMonth = self.monthViews.indexOf(visibleMonth) {
+            if indexOfMonth - 1 >= 0 {
+                let previousMonth = self.monthViews[indexOfMonth - 1]
+                self.snapToCalendarView(previousMonth)
+            }
+            
+        }
+    }
+    
     private func insertMonthViewAndReadjustScrollView(monthView: CalendarMonthView, atIndex viewIndex: Int) {
         let offsetHeight = monthView.bounds.height
         
@@ -338,5 +358,14 @@ public class CalendarVerticalView: UIScrollView, UIScrollViewDelegate, CalendarM
     
     func calendarMonthView(monthView: CalendarMonthView, laidOut dayView: CalendarDayView) {
         self.calendarDelegate?.calendarView?(self, laidOutDayView: dayView)
+    }
+    
+    //MARK: - CalendarTitleViewDelegate
+    public func calendarTitleViewHitNextButton() {
+        self.scrollToNextMonth()
+    }
+    
+    public func calendarTitleViewHitPreviousButton() {
+        self.scrollToPreviousMonth()
     }
 }
