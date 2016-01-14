@@ -8,6 +8,9 @@
 
 import UIKit
 
+private let backArrowImage = UIImage(named: "BackArrow", inBundle: NSBundle(forClass: CalendarTitleView.self), compatibleWithTraitCollection: nil)
+private let forwardArrowImage = UIImage(named: "ForwardArrow", inBundle: NSBundle(forClass: CalendarTitleView.self), compatibleWithTraitCollection: nil)
+
 public protocol CalendarTitleViewDelegate: class {
     func calendarTitleViewHitPreviousButton()
     func calendarTitleViewHitNextButton()
@@ -44,16 +47,20 @@ public class CalendarTitleView: UIView {
     }
     
     private func setupButtons() {
-        
+        let height = self.bounds.height - 6.0
         let buttonPrevious = UIButton(type: UIButtonType.System)
-        buttonPrevious.setTitle("Previous", forState: UIControlState.Normal)
-        buttonPrevious.bounds = CGRectMake(0.0, 0.0, 85.0, self.bounds.height)
+        buttonPrevious.setImage(backArrowImage, forState: .Normal)
+        buttonPrevious.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        buttonPrevious.contentHorizontalAlignment = .Left
+        buttonPrevious.bounds = CGRectMake(0.0, 0.0, 85.0, height)
         buttonPrevious.center = CGPoint(x: 8.0 + Double((buttonPrevious.bounds.width/2.0)), y: Double(self.bounds.height/2.0))
         buttonPrevious.addTarget(self, action: "buttonPressedPrevious:", forControlEvents: UIControlEvents.TouchUpInside)
 
         let buttonNext = UIButton(type: UIButtonType.System)
-        buttonNext.setTitle("Next", forState: UIControlState.Normal)
-        buttonNext.bounds = CGRectMake(0.0, 0.0, 85.0, self.bounds.height)
+        buttonNext.setImage(forwardArrowImage, forState: .Normal)
+        buttonNext.contentHorizontalAlignment = .Right
+        buttonNext.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
+        buttonNext.bounds = CGRectMake(0.0, 0.0, 85.0, height)
         buttonNext.center = CGPoint(x: Double(self.bounds.width) - 8.0 - Double((buttonNext.bounds.width/2.0)), y: Double(self.bounds.height/2.0))
         buttonNext.addTarget(self, action: "buttonPressedNext:", forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(buttonNext)
