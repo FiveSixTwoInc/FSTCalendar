@@ -54,7 +54,7 @@ public class CalendarTitleView: UIView {
         buttonPrevious.contentHorizontalAlignment = .Left
         buttonPrevious.bounds = CGRectMake(0.0, 0.0, 85.0, height)
         buttonPrevious.center = CGPoint(x: 8.0 + Double((buttonPrevious.bounds.width/2.0)), y: Double(self.bounds.height/2.0))
-        buttonPrevious.addTarget(self, action: "buttonPressedPrevious:", forControlEvents: UIControlEvents.TouchUpInside)
+        buttonPrevious.addTarget(self, action: #selector(CalendarTitleView.buttonPressedPrevious(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 
         let buttonNext = UIButton(type: UIButtonType.System)
         buttonNext.setImage(forwardArrowImage, forState: .Normal)
@@ -62,7 +62,7 @@ public class CalendarTitleView: UIView {
         buttonNext.imageView?.contentMode = UIViewContentMode.ScaleAspectFit
         buttonNext.bounds = CGRectMake(0.0, 0.0, 85.0, height)
         buttonNext.center = CGPoint(x: Double(self.bounds.width) - 8.0 - Double((buttonNext.bounds.width/2.0)), y: Double(self.bounds.height/2.0))
-        buttonNext.addTarget(self, action: "buttonPressedNext:", forControlEvents: UIControlEvents.TouchUpInside)
+        buttonNext.addTarget(self, action: #selector(CalendarTitleView.buttonPressedNext(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         self.addSubview(buttonNext)
 
         self.addSubview(buttonPrevious)

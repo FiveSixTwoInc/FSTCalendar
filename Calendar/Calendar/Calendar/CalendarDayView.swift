@@ -45,7 +45,7 @@ public class CalendarDayView: UIView {
     private var labelDayNumber: UILabel!
     
     lazy var gestureRecognizerSelect: UITapGestureRecognizer = {
-        let gestureRecognizer = UITapGestureRecognizer(target: self, action: "didTapDayView")
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CalendarDayView.didTapDayView))
         return gestureRecognizer
     }()
     

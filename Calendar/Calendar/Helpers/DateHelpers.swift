@@ -219,7 +219,7 @@ public class DateHelpers: NSObject {
         switch month {
             case .January:
                 previousMonth = .December
-                year--
+                year -= 1
             default:
                 previousMonth = Month(rawValue:month.rawValue - 1)!
         }
@@ -235,7 +235,7 @@ public class DateHelpers: NSObject {
         switch month {
         case .December:
             nextMonth = .January
-            year++
+            year += 1
         default:
             nextMonth = Month(rawValue:month.rawValue + 1)!
         }
